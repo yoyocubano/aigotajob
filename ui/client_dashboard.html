@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiGotAJob | Applicant Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            height: 80vh;
+        }
+        
+        /* Stats Panel */
+        .stats-panel {
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Live Logs Terminal */
+        .logs-panel {
+            background: #000;
+            border-radius: 16px;
+            border: 1px solid #333;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        .logs-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            color: #00ff88;
+        }
+        .log-entry {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 4px;
+        }
+        @keyframes fadeIn { to { opacity: 1; } }
+        
+        .timestamp { color: #555; margin-right: 10px; }
+        .log-icon { margin-right: 8px; }
+        .log-target { color: #f0f; font-weight: bold; }
+        .log-action { color: #00d4ff; }
+
+        .radar-animation {
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            position: absolute;
+            top: 0;
+            left: -100%;
+            animation: radar 2s infinite linear;
+            opacity: 0.5;
+        }
+        @keyframes radar {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="main-container" style="max-width: 1400px;">
+        <div class="glass-header">
+            <div class="logo">🦅 AiGotAJob <span class="badge">LIVE</span></div>
+            <div class="user-profile">
+                <i class="fa-solid fa-circle-user"></i> Alex M. (Premium Account)
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Sidebar Stats -->
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <div class="stat-number" id="scanned-count">0</div>
+                    <div class="stat-label">Companies Scanned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="matches-count">0</div>
+                    <div class="stat-label">Perfect Matches Found</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="sent-count">0</div>
+                    <div class="stat-label">CVs Delivered</div>
+                </div>
+                
+                <div style="margin-top:auto; text-align:center;">
+                    <div class="magic-orb" style="width:60px; height:60px; margin-bottom:10px;"></div>
+                    <p style="font-size:0.8rem; color:#aaa;">System Active</p>
+                </div>
+            </div>
+
+            <!-- Live Terminal -->
+            <div class="logs-panel" id="terminal">
+                <div class="radar-animation"></div>
+                <div class="logs-header">
+                    <span><i class="fa-solid fa-terminal"></i> LIVE JOB FEED (LUXEMBOURG)</span>
+                    <span id="clock">00:00:00</span>
+                </div>
+                <!-- Logs will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Simulation
+        const companies = ["Amazon Lux", "ArcelorMittal", "Ferrero", "Deloitte", "PwC", "State Street", "Talkwalker", "Post Luxembourg", "BIL", "Spuerkeess"];
+        const roles = ["Software Engineer", "Project Manager", "Electrician", "Data Analyst", "HR Specialist"];
+        
+        let scanned = 0;
+        let matches = 0;
+        let sent = 0;
+
+        function addLog() {
+            const terminal = document.getElementById('terminal');
+            const now = new Date();
+            const time = now.toLocaleTimeString();
+            
+            const company = companies[Math.floor(Math.random() * companies.length)];
+            const role = roles[Math.floor(Math.random() * roles.length)];
+            
+            const types = [
+                { i: "fa-solid fa-magnifying-glass", c: "#aaa", text: `Scanning ${company} career portal...` },
+                { i: "fa-solid fa-bolt", c: "#ff0", text: `New Opportunity Detected: ${role}` },
+                { i: "fa-solid fa-paper-plane", c: "#00d4ff", text: `Sending Profile to ${company} Recruiter` },
+                { i: "fa-brands fa-linkedin", c: "#0077b5", text: `Indexing Recruiter Profile` }
+            ];
+            
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            const div = document.createElement('div');
+            div.className = 'log-entry';
+            div.innerHTML = `
+                <span class="timestamp">[${time}]</span>
+                <i class="${type.i} log-icon" style="color:${type.c}"></i>
+                <span class="log-text">${type.text}</span>
+            `;
+            
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
+
+            // Update Stats
+            scanned += Math.floor(Math.random() * 5);
+            if (type.text.includes("New Opportunity")) matches++;
+            if (type.text.includes("Sending")) sent++;
+            
+            document.getElementById('scanned-count').innerText = scanned;
+            document.getElementById('matches-count').innerText = matches;
+            document.getElementById('sent-count').innerText = sent;
+            
+            document.getElementById('clock').innerText = time;
+        }
+
+        // Run simulation loop
+        setInterval(addLog, 1500);
+    </script>
+</body>
+</html>

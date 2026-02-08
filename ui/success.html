@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiGotAJob | Generating...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #0f0c29;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00d4ff, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #00d4ff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        p { font-size: 1.2rem; line-height: 1.6; color: rgba(255,255,255,0.8); }
+        
+        .success-message { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="processing">
+            <div class="loader"></div>
+            <h1>Building Your Digital Twin</h1>
+            <p>Our AI is analyzing your LinkedIn profile and crafting your 50€ Modern Landing Page...</p>
+        </div>
+        <div id="success" class="success-message">
+            <h1 style="color: #00ff88; -webkit-text-fill-color: initial;">🚀 Site Live!</h1>
+            <p>Your personal URL is ready:</p>
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 20px 0; font-family: monospace; border: 1px dashed #00d4ff;">
+                aigotajob.com/u/alex-mercer
+            </div>
+            <p>We have automatically sent this link to <strong>35 recruiters</strong> matching your profile in Luxembourg.</p>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById('processing').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+        }, 3000);
+    </script>
+</body>
+</html>
