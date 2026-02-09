@@ -8,110 +8,127 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-dark: #050505;
-            --text-primary: #f0f0f0;
+            --bg-dark: #000000;
+            --text-primary: #ffffff;
             --gold-accent: #d4af37;
             --gold-gradient: linear-gradient(135deg, #d4af37, #f2d06b, #d4af37);
-            --glass: rgba(255, 255, 255, 0.03);
-            --border-gold: 1px solid rgba(212, 175, 55, 0.2);
+            --border-gold: 1px solid rgba(212, 175, 55, 0.4);
         }
         body {
             margin: 0;
             font-family: 'Lato', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-primary);
-            background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop'); 
-            background-blend-mode: overlay;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(10,10,10,0.8), #000);
-            z-index: -1;
-        }
-        .portal-card {
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(25px);
-            border: var(--border-gold);
-            padding: 60px;
-            text-align: center;
-            max-width: 600px;
-            margin-top: 8vh;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-            position: relative;
-        }
-        .logo-img {
-            width: 100%;
-            max-width: 450px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.1));
-        }
-        p {
-            font-size: 1.2rem;
-            color: #ccc;
-            font-weight: 300;
-            margin-bottom: 50px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-family: 'Playfair Display', serif;
-        }
-        .luxury-btn {
-            display: block;
-            width: 100%;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: transparent;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: white;
-            font-family: 'Lato', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            justify-content: center;
             overflow: hidden;
         }
-        .luxury-btn:hover {
-            border-color: var(--gold-accent);
-            background: rgba(212, 175, 55, 0.05);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
-            transform: scale(1.02);
+        .portal-card {
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(15px);
+            border: var(--border-gold);
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.1);
         }
-        .luxury-btn i { margin-right: 15px; color: var(--gold-accent); }
-        
-        .footer-note {
-            margin-top: 50px;
-            font-size: 0.65rem;
-            color: #666;
+        .eagle-logo {
+            width: 150px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+        }
+        .text-logo {
+            height: 50px;
+            margin-bottom: 30px;
+        }
+        p {
+            font-size: 0.9rem;
+            color: #888;
             text-transform: uppercase;
             letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+        .auth-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .luxury-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 15px;
+            width: 100%;
+            font-family: 'Lato', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .luxury-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--gold-accent);
+            color: var(--gold-accent);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        .luxury-btn i { font-size: 1.1rem; }
+        .fa-google { color: #ea4335; }
+        .fa-facebook { color: #1877f2; }
+        .fa-linkedin { color: #0077b5; }
+
+        .footer {
+            margin-top: 50px;
+            font-size: 0.6rem;
+            color: #444;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+        .welux-badge {
+            color: var(--gold-accent);
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
-
     <div class="portal-card">
-        <!-- Original Stitch-Style Logo with Stone base and integrated typography -->
-        <img src="/Users/yoyocubano/.gemini/antigravity/brain/aefc49bb-149d-46db-98ae-d38febf6939d/aigotajob_gold_logo_real_1770597715608.png" alt="AiGotAJob Master Logo" class="logo-img">
+        <!-- Floating Eagle (Clean version) -->
+        <img src="/Users/yoyocubano/.gemini/antigravity/brain/aefc49bb-149d-46db-98ae-d38febf6939d/welux_gold_eagle_transparent_1770599265752.png" alt="WeLux Eagle" class="eagle-logo">
         
-        <p>Private Career Concierge Service</p>
+        <!-- App Title (Clean version) -->
+        <div style="margin-bottom: 40px;">
+           <img src="/Users/yoyocubano/.gemini/antigravity/brain/aefc49bb-149d-46db-98ae-d38febf6939d/aigotajob_gold_text_transparent_1770599293133.png" alt="AiGotAJob" class="text-logo">
+        </div>
 
-        <button class="luxury-btn">
-            <i class="fa-brands fa-google"></i> Authenticate via Google
-        </button>
-        
-        <button class="luxury-btn">
-            <i class="fa-brands fa-linkedin"></i> Import Professional Portfolio
-        </button>
+        <p>Private Career Concierge</p>
 
-        <div class="footer-note">
-            Akamara Network • Secure Operating Protocol
+        <div class="auth-group">
+            <button class="luxury-btn" onclick="location.href='onboarding.html'">
+                <i class="fa-brands fa-google"></i> Authenticate with Google
+            </button>
+            <button class="luxury-btn" onclick="location.href='onboarding.html'">
+                <i class="fa-brands fa-facebook"></i> Authenticate with Facebook
+            </button>
+            <button class="luxury-btn" onclick="location.href='onboarding.html'">
+                <i class="fa-brands fa-linkedin"></i> Import Portfolio from LinkedIn
+            </button>
+        </div>
+
+        <div class="footer">
+            <span class="welux-badge">WeLux Powered</span> • Secure Protocol 2.1
         </div>
     </div>
+
+    <script>
+        console.log("Portal active. Welux Authenticator Ready.");
+    </script>
 </body>
 </html>
