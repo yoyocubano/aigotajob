@@ -1,239 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AiGotAJob | Applicant Command Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>AiGotAJob | Applicant Command Center (Stitch Edition)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 20px;
-            height: 80vh;
+        :root {
+            --neon-gold: #d4af37;
+            --bg-dark: #050508;
+            --glass-bg: rgba(10, 10, 15, 0.9);
         }
-        
-        /* Stats Panel */
-        .stats-panel {
-            background: rgba(0,0,0,0.2);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-dark);
+            color: #e0e0e0;
+            overflow: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
+            height: 100vh;
         }
-        .stat-card {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #00d4ff;
+        .sidebar {
+            width: 300px;
+            height: 100%;
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
         }
-        .stat-label {
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.6);
-        }
-
-        /* Live Logs Terminal */
-        .logs-panel {
+        .terminal {
             background: #000;
-            border-radius: 16px;
-            border: 1px solid #333;
-            font-family: 'Courier New', monospace;
+            border: 1px solid #222;
+            font-family: monospace;
             padding: 20px;
+            flex: 1;
             overflow-y: auto;
             position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-        }
-        .logs-header {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            color: #00ff88;
         }
         .log-entry {
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            opacity: 0;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
             animation: fadeIn 0.3s forwards;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 4px;
+            border-left: 2px solid transparent;
+            padding-left: 10px;
         }
-        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         
-        .timestamp { color: #555; margin-right: 10px; }
-        .log-icon { margin-right: 8px; }
-        .log-target { color: #f0f; font-weight: bold; }
-        .log-action { color: #00d4ff; }
+        .stat-card {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+        }
+        .eagle-small {
+            width: 40px;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+        }
 
-
-        .stop-btn {
-            background: rgba(255, 50, 50, 0.2);
-            color: #ff4d4d;
-            border: 1px solid rgba(255, 50, 50, 0.5);
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 700;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        .stop-btn:hover {
-            background: #ff4d4d;
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 50, 50, 0.6);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 20px;
+        .cta-footer {
+            background: rgba(212, 175, 55, 0.1);
+            border-top: 1px solid var(--neon-gold);
+            padding: 15px;
             text-align: center;
-            border: 1px solid #00d4ff;
-            box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
-            max-width: 400px;
+            font-size: 0.8rem;
         }
     </style>
 </head>
-<body>
-    <div class="main-container" style="max-width: 1400px;">
-        <div class="glass-header">
-            <div class="logo"><img src="logo.png" alt="Akamara Logo"> AiGotAJob <span class="badge">LIVE</span></div>
-            <div class="user-profile">
-                <i class="fa-solid fa-circle-user"></i> Alex M. (Premium Account)
-            </div>
-        </div>
+<body class="flex flex-col">
 
-        <div class="dashboard-grid">
-            <!-- Sidebar Stats -->
-            <div class="stats-panel">
+    <!-- Top Bar -->
+    <header class="p-6 border-b border-white/5 flex justify-between items-center glass-panel">
+        <div class="flex items-center gap-4">
+            <img src="assets/welux_eagle_v6.png" class="eagle-small">
+            <h1 class="text-xl font-bold text-white tracking-widest uppercase">We<span class="text-[#d4af37]">Lux</span> Enjambre</h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="text-right">
+                <p class="text-sm font-bold text-white">Abel Rhodes</p>
+                <p class="text-[10px] text-green-500 font-mono tracking-widest uppercase">System Online (Luxembourg)</p>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#d4af37] to-blue-500 border border-white/20"></div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar Stats -->
+        <aside class="sidebar p-6 space-y-6 flex flex-col glass-panel">
+            <div class="space-y-4">
                 <div class="stat-card">
-                    <div class="stat-number" id="scanned-count">0</div>
-                    <div class="stat-label">Companies Scanned</div>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Empresas Escaneadas</p>
+                    <p class="text-2xl font-bold text-white" id="scanned-count">0</p>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="matches-count">0</div>
-                    <div class="stat-label">Perfect Matches Found</div>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Coincidencias de Élite</p>
+                    <p class="text-2xl font-bold text-[#d4af37]" id="matches-count">0</p>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="sent-count">0</div>
-                    <div class="stat-label">CVs Delivered</div>
-                </div>
-                
-                <div style="margin-top:auto; text-align:center;">
-                    <button class="stop-btn" onclick="stopSwarm()">
-                        <i class="fa-solid fa-power-off"></i> STOP THE SWARM
-                    </button>
-                    <p style="font-size:0.8rem; color:#aaa; margin-top:10px;">I found a job!</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Portfolios Entregados</p>
+                    <p class="text-2xl font-bold text-cyan-400" id="sent-count">0</p>
                 </div>
             </div>
 
-            <!-- Live Terminal -->
-            <div class="logs-panel" id="terminal">
-                <div class="radar-animation"></div>
-                <div class="logs-header">
-                    <span><i class="fa-solid fa-terminal"></i> LIVE JOB FEED (LUXEMBOURG)</span>
-                    <span id="clock">00:00:00</span>
-                </div>
-                <!-- Logs will be injected here -->
+            <!-- Profile Overview -->
+            <div class="p-4 border border-white/5 rounded-xl bg-white/5 text-xs text-gray-400 space-y-2">
+                <p><span class="text-white">URL:</span> abelrhodes.com</p>
+                <p><span class="text-white">Tier:</span> Ultra-Luxury Creative</p>
+                <p><span class="text-white">Target:</span> Luxembourg Hub</p>
             </div>
-        </div>
+
+            <div class="mt-auto space-y-4 text-center">
+                <button onclick="window.location.href='index.html'" class="w-full py-3 bg-red-900/20 text-red-500 border border-red-500/30 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition-all">
+                    DESACTIVAR ENJAMBRE
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="flex-1 flex flex-col p-6 bg-black/50 overflow-hidden">
+            <div class="mb-4 flex justify-between items-center">
+                <h2 class="text-sm font-bold text-white tracking-[0.3em] uppercase">Monitor de Despliegue en Tiempo Real</h2>
+                <div class="text-[10px] text-gray-600 font-mono" id="clock">00:00:00</div>
+            </div>
+            
+            <div class="terminal rounded-xl" id="terminal">
+                <!-- Logs will appear here -->
+            </div>
+        </main>
     </div>
 
+    <!-- CTA Footer -->
+    <footer class="cta-footer">
+        <p class="text-gray-400">
+            <span class="text-[#d4af37] font-bold">¡Aumenta tu visibilidad!</span> Crea tu Landing Page personalizada para destacar en el enjambre de élite. 
+            <a href="#" class="underline ml-2 hover:text-white">Solicitar Landing Page Pro</a>
+        </p>
+    </footer>
+
     <script>
-        // Data Simulation
-        const companies = ["Amazon Lux", "ArcelorMittal", "Ferrero", "Deloitte", "PwC", "State Street", "Talkwalker", "Post Luxembourg", "BIL", "Spuerkeess"];
-        const roles = ["Software Engineer", "Project Manager", "Electrician", "Data Analyst", "HR Specialist"];
-        
+        const companies = ["Amazon Lux", "ArcelorMittal", "Ferrero", "Deloitte", "PwC", "Spuerkeess", "State Street", "Post Lux", "Hoplr Lux", "Creative Hub"];
+        const actions = [
+            { text: "Escaneando portal estratégico:", color: "#555" },
+            { text: "Sincronizando portfolio en:", color: "#00d4ff" },
+            { text: "MATCH DETECTADO en:", color: "#d4af37" },
+            { text: "Enviando perfil secreto a:", color: "#00ff88" }
+        ];
+
         let scanned = 0;
         let matches = 0;
         let sent = 0;
-        let simulationInterval;
 
         function addLog() {
             const terminal = document.getElementById('terminal');
-            const now = new Date();
-            const time = now.toLocaleTimeString();
-            
             const company = companies[Math.floor(Math.random() * companies.length)];
-            const role = roles[Math.floor(Math.random() * roles.length)];
-            
-            const types = [
-                { i: "fa-solid fa-magnifying-glass", c: "#aaa", text: `Scanning ${company} career portal...` },
-                { i: "fa-solid fa-bolt", c: "#ff0", text: `New Opportunity Detected: ${role}` },
-                { i: "fa-solid fa-paper-plane", c: "#00d4ff", text: `Sending Profile to ${company} Recruiter` },
-                { i: "fa-brands fa-linkedin", c: "#0077b5", text: `Indexing Recruiter Profile` }
-            ];
-            
-            const type = types[Math.floor(Math.random() * types.length)];
-            
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            const time = new Date().toLocaleTimeString();
+
             const div = document.createElement('div');
             div.className = 'log-entry';
-            div.innerHTML = `
-                <span class="timestamp">[${time}]</span>
-                <i class="${type.i} log-icon" style="color:${type.c}"></i>
-                <span class="log-text">${type.text}</span>
-            `;
+            div.style.borderLeftColor = action.color;
+            div.innerHTML = `<span class="text-gray-600 mr-4">[${time}]</span> <span style="color:${action.color}">${action.text}</span> <span class="text-white font-bold ml-2">${company}</span>`;
             
             terminal.appendChild(div);
-            terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
+            terminal.scrollTop = terminal.scrollHeight;
 
-            // Update Stats
-            scanned += Math.floor(Math.random() * 5);
-            if (type.text.includes("New Opportunity")) matches++;
-            if (type.text.includes("Sending")) sent++;
-            
+            // Stats Logic
+            scanned++;
+            if (action.text.includes("MATCH")) matches++;
+            if (action.text.includes("Enviando")) sent++;
+
             document.getElementById('scanned-count').innerText = scanned;
             document.getElementById('matches-count').innerText = matches;
             document.getElementById('sent-count').innerText = sent;
-            
             document.getElementById('clock').innerText = time;
         }
 
-        function stopSwarm() {
-            // Stop Simulation
-            clearInterval(simulationInterval);
-            
-            // Show Success Modal
-            const modal = document.getElementById('congrats-modal');
-            modal.style.display = 'flex';
-            
-            // Trigger Confetti (Simulated via console)
-            console.log("🎉 SUCCESS: JOB FOUND. SWARM DEACTIVATED.");
-        }
-
-        // Run simulation loop
-        simulationInterval = setInterval(addLog, 1500);
+        setInterval(addLog, 1200);
     </script>
 
-    <div id="congrats-modal" class="modal">
-        <div class="modal-content">
-            <div class="magic-orb"></div>
-            <h1>CONGRATULATIONS! 🥂</h1>
-            <p>Mission Accomplished. We are thrilled you found a new role.</p>
-            <p style="color:#00d4ff; margin:20px 0;">All bot operations have been suspended.</p>
-            <button class="cta-button" onclick="window.close()">Close Dashboard</button>
-        </div>
-    </div>
-</body>
 </body>
 </html>

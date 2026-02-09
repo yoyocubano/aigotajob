@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiGotAJob | Career Concierge (WeLux Edition)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --text-primary: #f0f0f0;
+            --gold-accent: #d4af37;
+            --gold-gradient: linear-gradient(135deg, #d4af37, #f2d06b, #d4af37);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border-gold: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        body {
+            margin: 0;
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop'); /* Subtle luxury texture fallback */
+            background-blend-mode: overlay;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(10,10,10,0.8), #000);
+            z-index: -1;
+        }
+        .portal-card {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(20px);
+            border: var(--border-gold);
+            padding: 60px;
+            text-align: center;
+            max-width: 500px;
+            margin-top: 10vh;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: var(--gold-gradient);
+            z-index: -1;
+            filter: blur(5px);
+            opacity: 0.3;
+        }
+        .logo-img {
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-accent);
+            padding: 5px;
+            margin-bottom: 30px;
+            object-fit: contain;
+            background: black;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #aaa;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: 0.5px;
+        }
+        .luxury-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 15px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-family: 'Lato', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .luxury-btn:hover {
+            border-color: var(--gold-accent);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        .luxury-btn i { margin-right: 10px; color: var(--gold-accent); }
+        
+        .footer-note {
+            margin-top: 40px;
+            font-size: 0.7rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <div class="portal-card">
+        <!-- Master Logo (Sister App Identity) -->
+        <img src="/Users/yoyocubano/.gemini/antigravity/brain/aefc49bb-149d-46db-98ae-d38febf6939d/welux_gold_eagle_icon_only_1770597880666.png" alt="WeLux Master Emblem" class="logo-img" style="border: none; background: transparent; box-shadow: none; width: 120px; height: 120px;">
+        
+        <!-- Project Specific Typography -->
+        <div style="margin-bottom: 30px;">
+            <img src="/Users/yoyocubano/.gemini/antigravity/brain/aefc49bb-149d-46db-98ae-d38febf6939d/aigotajob_gold_typography_only_1770597907888.png" alt="AiGotAJob Gold" style="height: 60px; display: block; margin: 0 auto;">
+        </div>
+        
+        <p>Private Access for Distinguished Professionals</p>
+
+        <button class="luxury-btn">
+            <i class="fa-brands fa-google"></i> Authenticate via Google
+        </button>
+        
+        <button class="luxury-btn">
+            <i class="fa-brands fa-linkedin"></i> Import Professional Profile
+        </button>
+
+        <div class="footer-note">
+            Powered by Antigravity • Secure Protocol
+        </div>
+    </div>
+</body>
+</html>

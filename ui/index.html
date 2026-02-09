@@ -1,134 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AiGotAJob | Career Concierge (WeLux Edition)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>AiGotAJob | Career Concierge (WeLux Suite)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-dark: #000000;
-            --text-primary: #ffffff;
-            --gold-accent: #d4af37;
-            --gold-gradient: linear-gradient(135deg, #d4af37, #f2d06b, #d4af37);
-            --border-gold: 1px solid rgba(212, 175, 55, 0.4);
+            --neon-gold: #d4af37;
+            --bg-dark: #050508;
+            --glass-bg: rgba(10, 10, 15, 0.85);
         }
         body {
-            margin: 0;
-            font-family: 'Lato', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             background-color: var(--bg-dark);
-            color: var(--text-primary);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
         }
-        .portal-card {
-            background: rgba(10, 10, 10, 0.4);
-            backdrop-filter: blur(15px);
-            border: var(--border-gold);
-            padding: 50px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.1);
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 8px 64px 0 rgba(0, 0, 0, 0.8);
         }
-        .eagle-logo {
-            width: 150px;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+        .eagle-master {
+            width: 160px;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.4));
+            animation: float 6s infinite ease-in-out;
         }
-        .text-logo {
-            height: 50px;
-            margin-bottom: 30px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        p {
-            font-size: 0.9rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 40px;
-        }
-        .auth-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .luxury-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 15px;
+        
+        .scanner-line {
+            position: absolute;
             width: 100%;
-            font-family: 'Lato', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s;
+            height: 2px;
+            background: var(--neon-gold);
+            box-shadow: 0 0 20px var(--neon-gold);
+            top: 0;
+            left: 0;
+            animation: scan 4s infinite linear;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+
+        .auth-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
-        .luxury-btn:hover {
-            background: rgba(212, 175, 55, 0.1);
-            border-color: var(--gold-accent);
-            color: var(--gold-accent);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        .auth-btn:hover {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--neon-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
         }
-        .luxury-btn i { font-size: 1.1rem; }
-        .fa-google { color: #ea4335; }
-        .fa-facebook { color: #1877f2; }
-        .fa-linkedin { color: #0077b5; }
 
-        .footer {
-            margin-top: 50px;
-            font-size: 0.6rem;
-            color: #444;
-            letter-spacing: 5px;
-            text-transform: uppercase;
+        .cta-box {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
+            border: 1px dashed var(--neon-gold);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
         }
-        .welux-badge {
-            color: var(--gold-accent);
-            font-weight: bold;
+
+        /* Overlay Styles */
+        #test-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .status-terminal {
+            width: 100%;
+            max-width: 500px;
+            font-family: monospace;
+            color: var(--neon-gold);
+            padding: 20px;
+            border-left: 2px solid var(--neon-gold);
+            background: rgba(212, 175, 55, 0.05);
+            margin-top: 20px;
         }
     </style>
 </head>
-<body>
-    <div class="portal-card">
-        <!-- Floating Eagle (Clean version) -->
-        <img src="/Users/yoyocubano/.gemini/antigravity/brain/aefc49bb-149d-46db-98ae-d38febf6939d/welux_gold_eagle_transparent_1770599265752.png" alt="WeLux Eagle" class="eagle-logo">
+<body class="flex flex-col items-center justify-center p-4">
+
+    <!-- Hero Branding -->
+    <div class="mb-12 flex flex-col items-center text-center">
+        <img src="assets/welux_eagle_v6.png" alt="WeLux" class="eagle-master mb-4">
+        <h1 class="text-5xl font-bold tracking-tighter text-white">AiGotA<span class="text-[#d4af37]">Job</span></h1>
+        <p class="text-gray-500 uppercase tracking-[0.3em] text-xs mt-2">Private Career Concierge</p>
+    </div>
+
+    <!-- Main Portal Card -->
+    <div class="glass-panel p-8 md:p-12 rounded-3xl w-full max-w-xl relative overflow-hidden">
+        <div class="scanner-line"></div>
         
-        <!-- App Title (Clean version) -->
-        <div style="margin-bottom: 40px;">
-           <img src="/Users/yoyocubano/.gemini/antigravity/brain/aefc49bb-149d-46db-98ae-d38febf6939d/aigotajob_gold_text_transparent_1770599293133.png" alt="AiGotAJob" class="text-logo">
-        </div>
-
-        <p>Private Career Concierge</p>
-
-        <div class="auth-group">
-            <button class="luxury-btn" onclick="location.href='onboarding.html'">
-                <i class="fa-brands fa-google"></i> Authenticate with Google
+        <h2 class="text-2xl font-bold text-white mb-8 text-center">Inicia Sesión en WeLux</h2>
+        
+        <div class="space-y-4">
+            <button onclick="startProTest('Google')" class="auth-btn">
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-6">
+                <span>Continuar con Google</span>
             </button>
-            <button class="luxury-btn" onclick="location.href='onboarding.html'">
-                <i class="fa-brands fa-facebook"></i> Authenticate with Facebook
+            <button onclick="startProTest('Facebook')" class="auth-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" class="w-6">
+                <span>Continuar con Facebook</span>
             </button>
-            <button class="luxury-btn" onclick="location.href='onboarding.html'">
-                <i class="fa-brands fa-linkedin"></i> Import Portfolio from LinkedIn
+            <button onclick="window.location.href='https://linkedin.com'" class="auth-btn" style="border-color: #0077b5;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" class="w-6">
+                <span>Conectar con LinkedIn</span>
             </button>
         </div>
 
-        <div class="footer">
-            <span class="welux-badge">WeLux Powered</span> • Secure Protocol 2.1
+        <!-- Call to Action -->
+        <div class="cta-box">
+            <h3 class="text-[#d4af37] font-bold mb-2">¿Quieres Mayor Visibilidad?</h3>
+            <p class="text-xs text-gray-400 mb-4">Crea tu propia landing page personalizada para mejorar tu posicionamiento ante empresas de élite.</p>
+            <button onclick="startProTest('WeLux Creator')" class="bg-[#d4af37] text-black text-xs font-bold px-6 py-2 rounded-full hover:bg-white transition-colors">
+                CREAR MI LANDING PAGE
+            </button>
+        </div>
+
+        <div class="mt-8 flex justify-between items-center text-[10px] text-gray-600 font-mono">
+            <span>WE-LUX POWERED</span>
+            <span>SECURE TRANSIT</span>
+        </div>
+    </div>
+
+    <!-- Active Test Overlay -->
+    <div id="test-overlay">
+        <img src="assets/welux_eagle_v6.png" class="w-24 mb-8">
+        <h2 class="text-3xl font-bold text-white tracking-[0.2em] mb-2 uppercase">WeLux Systems Active</h2>
+        <div class="status-terminal">
+            <div id="test-status">Iniciando verificación biométrica...</div>
         </div>
     </div>
 
     <script>
-        console.log("Portal active. Welux Authenticator Ready.");
+        function startProTest(provider) {
+            const overlay = document.getElementById('test-overlay');
+            const status = document.getElementById('test-status');
+            overlay.style.display = 'flex';
+            
+            const steps = [
+                `Estableciendo enlace seguro con ${provider}...`,
+                "Identificando perfil: abelrhodes.com",
+                "Extrayendo datos de carrera de Abel Rhodes...",
+                "Sincronizando con enjambre de reclutamiento...",
+                "ENVIO MASIVO: Deloitte, Amazon, ArcelorMittal...",
+                "CONFIRMACIÓN: Reporte enviado a info@abelrhodes.com",
+                "Redirigiendo a tu Dashboard de Comando..."
+            ];
+            
+            let i = 0;
+            const interval = setInterval(() => {
+                if (status) status.innerText = steps[i];
+                i++;
+                if (i >= steps.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        window.location.href = 'onboarding.html';
+                    }, 1000);
+                }
+            }, 800);
+        }
     </script>
 </body>
 </html>
