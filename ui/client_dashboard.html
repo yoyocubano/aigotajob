@@ -1,175 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AiGotAJob | Applicant Command Center (Stitch Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --neon-gold: #d4af37;
-            --bg-dark: #050508;
-            --glass-bg: rgba(10, 10, 15, 0.9);
+      :root {
+        --neon-gold: #d4af37;
+        --bg-dark: #050508;
+        --glass-bg: rgba(10, 10, 15, 0.9);
+      }
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background-color: var(--bg-dark);
+        color: #e0e0e0;
+        overflow: hidden;
+        background-image: radial-gradient(
+          circle at 50% 50%,
+          #1a1a1a 0%,
+          #000 100%
+        );
+        height: 100vh;
+      }
+      .glass-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+      }
+      .sidebar {
+        width: 300px;
+        height: 100%;
+        border-right: 1px solid rgba(212, 175, 55, 0.1);
+      }
+      .terminal {
+        background: #000;
+        border: 1px solid #222;
+        font-family: monospace;
+        padding: 20px;
+        flex: 1;
+        overflow-y: auto;
+        position: relative;
+      }
+      .log-entry {
+        margin-bottom: 6px;
+        font-size: 0.85rem;
+        animation: fadeIn 0.3s forwards;
+        border-left: 2px solid transparent;
+        padding-left: 10px;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateX(-10px);
         }
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--bg-dark);
-            color: #e0e0e0;
-            overflow: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
-            height: 100vh;
+        to {
+          opacity: 1;
+          transform: translateX(0);
         }
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-        }
-        .sidebar {
-            width: 300px;
-            height: 100%;
-            border-right: 1px solid rgba(212, 175, 55, 0.1);
-        }
-        .terminal {
-            background: #000;
-            border: 1px solid #222;
-            font-family: monospace;
-            padding: 20px;
-            flex: 1;
-            overflow-y: auto;
-            position: relative;
-        }
-        .log-entry {
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-            animation: fadeIn 0.3s forwards;
-            border-left: 2px solid transparent;
-            padding-left: 10px;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-        
-        .stat-card {
-            background: rgba(212, 175, 55, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            padding: 15px;
-            border-radius: 12px;
-        }
-        .eagle-small {
-            width: 40px;
-            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
-        }
+      }
 
-        .cta-footer {
-            background: rgba(212, 175, 55, 0.1);
-            border-top: 1px solid var(--neon-gold);
-            padding: 15px;
-            text-align: center;
-            font-size: 0.8rem;
-        }
+      .stat-card {
+        background: rgba(212, 175, 55, 0.05);
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        padding: 15px;
+        border-radius: 12px;
+      }
+      .eagle-small {
+        width: 40px;
+        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+      }
+
+      .cta-footer {
+        background: rgba(212, 175, 55, 0.1);
+        border-top: 1px solid var(--neon-gold);
+        padding: 15px;
+        text-align: center;
+        font-size: 0.8rem;
+      }
     </style>
-</head>
-<body class="flex flex-col">
-
+  </head>
+  <body class="flex flex-col">
     <!-- Top Bar -->
-    <header class="p-6 border-b border-white/5 flex justify-between items-center glass-panel">
-        <div class="flex items-center gap-4">
-            <img src="assets/welux_eagle_isolated.png" class="eagle-small">
-            <h1 class="text-xl font-bold text-white tracking-widest uppercase">BEE <span class="text-[#d4af37]">ARMY</span> Enjambre</h1>
+    <header
+      class="p-6 border-b border-white/5 flex justify-between items-center glass-panel"
+    >
+      <div class="flex items-center gap-4">
+        <img src="assets/welux_eagle_isolated.png" class="eagle-small" />
+        <h1 class="text-xl font-bold text-white tracking-widest uppercase">
+          AiGotA<span class="text-[#d4af37]">Job</span>
+        </h1>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="text-right">
+          <p class="text-sm font-bold text-white">Abel Rhodes</p>
+          <p
+            class="text-[10px] text-green-500 font-mono tracking-widest uppercase"
+          >
+            System Online (Luxembourg)
+          </p>
         </div>
-        <div class="flex items-center gap-6">
-            <div class="text-right">
-                <p class="text-sm font-bold text-white">Abel Rhodes</p>
-                <p class="text-[10px] text-green-500 font-mono tracking-widest uppercase">System Online (Luxembourg)</p>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#d4af37] to-blue-500 border border-white/20"></div>
-        </div>
+        <div
+          class="w-10 h-10 rounded-full bg-gradient-to-br from-[#d4af37] to-blue-500 border border-white/20"
+        ></div>
+      </div>
     </header>
 
     <div class="flex flex-1 overflow-hidden">
-        <!-- Sidebar Stats -->
-        <aside class="sidebar p-6 space-y-6 flex flex-col glass-panel">
-            <div class="space-y-4">
-                <div class="stat-card">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Empresas Escaneadas</p>
-                    <p class="text-2xl font-bold text-white" id="scanned-count">0</p>
-                </div>
-                <div class="stat-card">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Coincidencias de Élite</p>
-                    <p class="text-2xl font-bold text-[#d4af37]" id="matches-count">0</p>
-                </div>
-                <div class="stat-card">
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Portfolios Entregados</p>
-                    <p class="text-2xl font-bold text-cyan-400" id="sent-count">0</p>
-                </div>
-            </div>
+      <!-- Sidebar Stats -->
+      <aside class="sidebar p-6 space-y-6 flex flex-col glass-panel">
+        <div class="space-y-4">
+          <div class="stat-card">
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest">
+              Empresas Escaneadas
+            </p>
+            <p class="text-2xl font-bold text-white" id="scanned-count">0</p>
+          </div>
+          <div class="stat-card">
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest">
+              Coincidencias de Élite
+            </p>
+            <p class="text-2xl font-bold text-[#d4af37]" id="matches-count">
+              0
+            </p>
+          </div>
+          <div class="stat-card">
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest">
+              Portfolios Entregados
+            </p>
+            <p class="text-2xl font-bold text-cyan-400" id="sent-count">0</p>
+          </div>
+        </div>
 
-            <!-- Profile Overview -->
-            <div class="p-4 border border-white/5 rounded-xl bg-white/5 text-xs text-gray-400 space-y-2">
-                <p><span class="text-white">URL:</span> abelrhodes.com</p>
-                <p><span class="text-white">Tier:</span> Ultra-Luxury Creative</p>
-                <p><span class="text-white">Target:</span> Luxembourg Hub</p>
-            </div>
+        <!-- Profile Overview -->
+        <div
+          class="p-4 border border-white/5 rounded-xl bg-white/5 text-xs text-gray-400 space-y-2"
+        >
+          <p><span class="text-white">URL:</span> abelrhodes.com</p>
+          <p><span class="text-white">Tier:</span> Ultra-Luxury Creative</p>
+          <p><span class="text-white">Target:</span> Luxembourg Hub</p>
+        </div>
 
-            <div class="mt-auto space-y-4 text-center">
-                <button onclick="window.location.href='index.html'" class="w-full py-3 bg-red-900/20 text-red-500 border border-red-500/30 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition-all">
-                    DESACTIVAR ENJAMBRE
-                </button>
-            </div>
-        </aside>
+        <div class="mt-auto space-y-4 text-center">
+          <button
+            onclick="window.location.href = 'index.html'"
+            class="w-full py-3 bg-red-900/20 text-red-500 border border-red-500/30 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition-all"
+          >
+            DESACTIVAR AIGOTAJOB
+          </button>
+        </div>
+      </aside>
 
-        <!-- Main Workspace -->
-        <main class="flex-1 flex flex-col p-6 bg-black/50 overflow-hidden">
-            <div class="mb-4 flex justify-between items-center">
-                <h2 class="text-sm font-bold text-white tracking-[0.3em] uppercase">Monitor de Despliegue en Tiempo Real</h2>
-                <div class="text-[10px] text-gray-600 font-mono" id="clock">00:00:00</div>
-            </div>
-            
-            <div class="terminal rounded-xl" id="terminal">
-                <!-- Logs will appear here -->
-            </div>
-        </main>
+      <!-- Main Workspace -->
+      <main class="flex-1 flex flex-col p-6 bg-black/50 overflow-hidden">
+        <div class="mb-4 flex justify-between items-center">
+          <h2 class="text-sm font-bold text-white tracking-[0.3em] uppercase">
+            Monitor de Despliegue en Tiempo Real
+          </h2>
+          <div class="text-[10px] text-gray-600 font-mono" id="clock">
+            00:00:00
+          </div>
+        </div>
+
+        <div class="terminal rounded-xl" id="terminal">
+          <!-- Logs will appear here -->
+        </div>
+      </main>
     </div>
 
     <!-- CTA Footer -->
     <footer class="cta-footer">
-        <p class="text-gray-400">
-            <span class="text-[#d4af37] font-bold">¡Aumenta tu visibilidad!</span> Crea tu Landing Page personalizada para destacar en el enjambre de élite. 
-            <a href="#" class="underline ml-2 hover:text-white">Solicitar Landing Page Pro</a>
-        </p>
+      <p class="text-gray-400">
+        <span class="text-[#d4af37] font-bold">¡Aumenta tu visibilidad!</span>
+        Crea tu Landing Page personalizada para destacar en el enjambre de
+        élite.
+        <a href="#" class="underline ml-2 hover:text-white"
+          >Solicitar Landing Page Pro</a
+        >
+      </p>
     </footer>
 
     <script src="real_results.js"></script>
     <script>
-        const companies = ["Amazon Lux", "ArcelorMittal", "Ferrero", "Deloitte", "PwC", "Spuerkeess", "State Street", "Post Lux", "Hoplr Lux", "Creative Hub", "European Investment Bank", "SES Luxembourg"];
-        const actions = [
-            { text: "Escaneando portal estratégico:", color: "#555", type: "scan" },
-            { text: "Analizando requerimientos en:", color: "#555", type: "scan" },
-            { text: "Sincronizando portfolio en:", color: "#00d4ff", type: "sync" },
-            { text: "MATCH DETECTADO en:", color: "#d4af37", type: "match" },
-            { text: "Enviando perfil secreto a:", color: "#00ff88", type: "send" }
-        ];
+      const companies = [
+        "Amazon Lux",
+        "ArcelorMittal",
+        "Ferrero",
+        "Deloitte",
+        "PwC",
+        "Spuerkeess",
+        "State Street",
+        "Post Lux",
+        "Hoplr Lux",
+        "Creative Hub",
+        "European Investment Bank",
+        "SES Luxembourg",
+      ];
+      const actions = [
+        { text: "Escaneando portal estratégico:", color: "#555", type: "scan" },
+        { text: "Analizando requerimientos en:", color: "#555", type: "scan" },
+        { text: "Sincronizando portfolio en:", color: "#00d4ff", type: "sync" },
+        { text: "MATCH DETECTADO en:", color: "#d4af37", type: "match" },
+        { text: "Enviando perfil secreto a:", color: "#00ff88", type: "send" },
+      ];
 
-        let scanned = 0;
-        let matches = 0;
-        let sent = 0;
-        let maxActions = 12; // One single "surgical" sweep of the market
-        let currentActions = 0;
-        let recentCompanies = [];
+      let scanned = 0;
+      let matches = 0;
+      let sent = 0;
+      let maxActions = 12; // One single "surgical" sweep of the market
+      let currentActions = 0;
+      let recentCompanies = [];
 
-        function renderRealReports() {
-            const terminal = document.getElementById('terminal');
-            if (typeof realResults !== 'undefined' && realResults.length > 0) {
-                const header = document.createElement('div');
-                header.className = 'text-[#d4af37] font-bold mb-4 border-b border-[#d4af37]/30 pb-2 flex items-center gap-2';
-                header.innerHTML = '<i class="fas fa-shield-alt"></i> BÚNKER DE RESULTADOS REALES (info@abelrhodes.com)';
-                terminal.prepend(header);
+      function renderRealReports() {
+        const terminal = document.getElementById("terminal");
+        if (typeof realResults !== "undefined" && realResults.length > 0) {
+          const header = document.createElement("div");
+          header.className =
+            "text-[#d4af37] font-bold mb-4 border-b border-[#d4af37]/30 pb-2 flex items-center gap-2";
+          header.innerHTML =
+            '<i class="fas fa-shield-alt"></i> BÚNKER DE RESULTADOS REALES (info@abelrhodes.com)';
+          terminal.prepend(header);
 
-                realResults.forEach(report => {
-                    const div = document.createElement('div');
-                    div.className = 'log-entry mb-4 p-3 bg-white/5 border-l-2 border-[#d4af37] rounded-r';
-                    div.innerHTML = `
+          realResults.forEach((report) => {
+            const div = document.createElement("div");
+            div.className =
+              "log-entry mb-4 p-3 bg-white/5 border-l-2 border-[#d4af37] rounded-r";
+            div.innerHTML = `
                         <div class="flex justify-between items-center mb-1">
                             <span class="text-[10px] text-gray-500 font-mono">[${report.timestamp}]</span>
                             <span class="text-[9px] uppercase tracking-widest px-2 py-0.5 bg-[#d4af37]/20 text-[#d4af37] rounded">REAL UPDATE</span>
@@ -177,65 +242,69 @@
                         <p class="text-white font-bold text-xs mb-1">${report.subject}</p>
                         <p class="text-gray-400 text-[11px] leading-relaxed">${report.message}</p>
                     `;
-                    terminal.insertBefore(div, header.nextSibling);
-                });
-            }
+            terminal.insertBefore(div, header.nextSibling);
+          });
+        }
+      }
+
+      function addLog() {
+        if (currentActions >= maxActions) {
+          // Final Behavior: Mandatory 28h Hibernation Status
+          const terminal = document.getElementById("terminal");
+          const time = new Date().toLocaleTimeString();
+          const div = document.createElement("div");
+          div.className = "log-entry";
+          div.style.borderLeftColor = "#ff3333";
+          div.innerHTML = `<span class="text-gray-600 mr-4">[${time}]</span> <span style="color:#ff3333; font-weight:bold;">ESTADO: ESCANEO COMPLETO. HIBERNANDO POR PROTOCOLO (28H)...</span>`;
+          terminal.appendChild(div);
+          terminal.scrollTop = terminal.scrollHeight;
+
+          // Stop the process completely. Human pattern enforced.
+          return;
         }
 
-        function addLog() {
-            if (currentActions >= maxActions) {
-                // Final Behavior: Mandatory 28h Hibernation Status
-                const terminal = document.getElementById('terminal');
-                const time = new Date().toLocaleTimeString();
-                const div = document.createElement('div');
-                div.className = 'log-entry';
-                div.style.borderLeftColor = "#ff3333";
-                div.innerHTML = `<span class="text-gray-600 mr-4">[${time}]</span> <span style="color:#ff3333; font-weight:bold;">ESTADO: ESCANEO COMPLETO. HIBERNANDO POR PROTOCOLO (28H)...</span>`;
-                terminal.appendChild(div);
-                terminal.scrollTop = terminal.scrollHeight;
-                
-                // Stop the process completely. Human pattern enforced.
-                return;
-            }
+        const terminal = document.getElementById("terminal");
 
-            const terminal = document.getElementById('terminal');
-            
-            // Ultra-Strict Deduplication
-            let availableCompanies = companies.filter(c => !recentCompanies.includes(c));
-            const company = availableCompanies[Math.floor(Math.random() * availableCompanies.length)];
-            recentCompanies.push(company);
+        // Ultra-Strict Deduplication
+        let availableCompanies = companies.filter(
+          (c) => !recentCompanies.includes(c),
+        );
+        const company =
+          availableCompanies[
+            Math.floor(Math.random() * availableCompanies.length)
+          ];
+        recentCompanies.push(company);
 
-            const action = actions[Math.floor(Math.random() * actions.length)];
-            const time = new Date().toLocaleTimeString();
+        const action = actions[Math.floor(Math.random() * actions.length)];
+        const time = new Date().toLocaleTimeString();
 
-            const div = document.createElement('div');
-            div.className = 'log-entry';
-            div.style.borderLeftColor = action.color;
-            div.innerHTML = `<span class="text-gray-600 mr-4">[${time}]</span> <span style="color:${action.color}">${action.text}</span> <span class="text-white font-bold ml-2">${company}</span>`;
-            
-            terminal.appendChild(div);
-            terminal.scrollTop = terminal.scrollHeight;
+        const div = document.createElement("div");
+        div.className = "log-entry";
+        div.style.borderLeftColor = action.color;
+        div.innerHTML = `<span class="text-gray-600 mr-4">[${time}]</span> <span style="color:${action.color}">${action.text}</span> <span class="text-white font-bold ml-2">${company}</span>`;
 
-            // Stats Logic
-            if (action.type === "scan") scanned++;
-            if (action.type === "match") matches++;
-            if (action.type === "send") sent++;
+        terminal.appendChild(div);
+        terminal.scrollTop = terminal.scrollHeight;
 
-            document.getElementById('scanned-count').innerText = scanned;
-            document.getElementById('matches-count').innerText = matches;
-            document.getElementById('sent-count').innerText = sent;
-            document.getElementById('clock').innerText = time;
-            
-            currentActions++;
-            
-            // Longer intervals between actions (Human-like processing)
-            setTimeout(addLog, Math.random() * 4000 + 2000);
-        }
+        // Stats Logic
+        if (action.type === "scan") scanned++;
+        if (action.type === "match") matches++;
+        if (action.type === "send") sent++;
 
-        // Start the controlled surgical strike and render real data
-        renderRealReports();
-        setTimeout(addLog, 2000);
+        document.getElementById("scanned-count").innerText = scanned;
+        document.getElementById("matches-count").innerText = matches;
+        document.getElementById("sent-count").innerText = sent;
+        document.getElementById("clock").innerText = time;
+
+        currentActions++;
+
+        // Longer intervals between actions (Human-like processing)
+        setTimeout(addLog, Math.random() * 4000 + 2000);
+      }
+
+      // Start the controlled surgical strike and render real data
+      renderRealReports();
+      setTimeout(addLog, 2000);
     </script>
-
-</body>
+  </body>
 </html>

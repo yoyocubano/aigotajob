@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bee Army | Personal Career Intelligence</title>
+    <title>AiGotAJob | Personal Career Concierge</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -64,6 +64,7 @@
             border-radius: 12px;
             display: flex;
             align-items: center;
+            justify-content: center; /* Centered content */
             gap: 12px;
             font-size: 0.9rem;
             font-weight: 500;
@@ -151,16 +152,16 @@
 
     <!-- Hero Branding -->
     <div class="mb-12 flex flex-col items-center text-center">
-        <img src="assets/welux_eagle_isolated.png" alt="Bee Army" class="eagle-master mb-4">
-        <h1 class="text-5xl font-bold tracking-tighter text-white" data-i18n="hero_brand">BEE <span class="text-[#d4af37]">ARMY</span></h1>
-        <p class="text-gray-500 uppercase tracking-[0.3em] text-xs mt-2" data-i18n="hero_subtitle">Personal Career Intelligence</p>
+        <img src="assets/welux_eagle_isolated.png" alt="AiGotAJob" class="eagle-master mb-4">
+        <h1 class="text-5xl font-bold tracking-tighter text-white" data-i18n="hero_brand">AiGotA<span class="text-[#d4af37]">Job</span></h1>
+        <p class="text-gray-500 uppercase tracking-[0.3em] text-xs mt-2" data-i18n="hero_subtitle">Personal Career Concierge</p>
     </div>
 
     <!-- Main Portal Card -->
     <div class="glass-panel p-8 md:p-12 rounded-3xl w-full max-w-xl relative overflow-hidden">
         <div class="scanner-line"></div>
         
-        <h2 class="text-2xl font-bold text-white mb-8 text-center" data-i18n="login_header">Inicia Sesión en Bee Army</h2>
+        <h2 class="text-2xl font-bold text-white mb-8 text-center" data-i18n="login_header">Inicia Sesión en AiGotAJob</h2>
         
         <div class="space-y-4" id="auth-container">
             <button onclick="startProTest('Google')" class="auth-btn" data-intent="google">
@@ -177,24 +178,15 @@
             </button>
         </div>
 
-        <!-- Call to Action -->
-        <div class="cta-box">
-            <h3 class="text-[#d4af37] font-bold mb-2" data-i18n="validator_title">Validador de ADN Personal</h3>
-            <p class="text-[10px] text-gray-400 mb-4" data-i18n="validator_desc">Verifica si tu web cumple los estándares de Landing Personal para el Enjambre Bee Army.</p>
-            <input type="text" id="url-to-validate" placeholder="https://tu-landing.com" class="validator-input" data-i18n="validator_placeholder">
-            <button onclick="validateDNA()" class="validate-btn" data-i18n="validator_btn">ESCANEAR ADN DIGITAL</button>
-            <div id="validation-result"></div>
-        </div>
-
         <div class="mt-8 flex justify-between items-center text-[10px] text-gray-600 font-mono">
-            <span data-i18n="footer_cloud">BEE ARMY NEXUS CLOUD</span>
+            <span data-i18n="footer_cloud">AIGOTAJOB NEXUS CLOUD</span>
             <span data-i18n="footer_isolation">DATA ISOLATION: ON</span>
         </div>
     </div>
 
     <div id="test-overlay">
         <img src="assets/welux_eagle_isolated.png" class="w-24 mb-8">
-        <h2 class="text-3xl font-bold text-white tracking-[0.2em] mb-2 uppercase" data-i18n="overlay_title">Bee Army Systems Active</h2>
+        <h2 class="text-3xl font-bold text-white tracking-[0.2em] mb-2 uppercase" data-i18n="overlay_title">AiGotAJob Systems Active</h2>
         <div class="status-terminal">
             <div id="test-status" data-i18n="overlay_status">Iniciando verificación biométrica...</div>
         </div>
@@ -260,7 +252,7 @@
                 `Estableciendo enlace seguro con el núcleo de ${provider}...`,
                 "Identificando perfil: abelrhodes.com",
                 "Extrayendo datos de carrera de Abel Rhodes...",
-                "Sincronizando con enjambre de reclutamiento Bee Army...",
+                "Sincronizando con enjambre de reclutamiento AiGotAJob...",
                 "CONFIRMACIÓN: Canal de reporte habilitado para info@abelrhodes.com",
                 "Certificado de seguridad activado. Redirigiendo..."
             ];

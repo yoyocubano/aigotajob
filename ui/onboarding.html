@@ -6,6 +6,8 @@
     <title>AiGotAJob | CV Onboarding (Stitch Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="i18n.js"></script>
     <style>
         :root {
             --neon-blue: #00f3ff;
@@ -35,18 +37,123 @@
             width: 100px;
             filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.4));
         }
+        .settings-bar {
+            background: rgba(0,0,0,0.8);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 50;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Validator styles */
+        .cta-box {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
+            border: 1px dashed var(--neon-gold);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .validator-input {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            color: white;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            outline: none;
+        }
+        .validate-btn {
+            background: var(--neon-gold);
+            color: black;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            width: 100%;
+        }
+        #validation-result { font-family: monospace; font-size: 0.7rem; margin-top: 10px; }
+        .result-success { color: #4ade80; }
+        .result-error { color: #f87171; }
     </style>
 </head>
-<body class="min-h-screen p-8 flex items-center justify-center">
+    <!-- Persistent Settings Bar -->
+    <nav class="fixed top-0 left-0 right-0 h-16 settings-bar flex items-center justify-between px-8">
+        <div class="flex items-center gap-3">
+            <img src="assets/welux_eagle_isolated.png" class="w-8">
+            <span class="font-bold text-white tracking-widest text-sm">AiGotAJob</span>
+        </div>
+        <div class="flex items-center gap-6">
+            <button onclick="toggleSettings()" class="text-gray-400 hover:text-[#d4af37] transition-colors flex items-center gap-2">
+                <i class="fas fa-cog"></i>
+                <span class="text-[10px] uppercase font-mono tracking-widest">Settings</span>
+            </button>
+            <div class="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 border border-white/20"></div>
+        </div>
+    </nav>
 
-    <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <!-- Settings Overlay -->
+    <div id="settings-panel" class="fixed inset-y-0 right-0 w-80 bg-[#0a0a0f] border-l border-white/10 z-[60] transform translate-x-full transition-transform duration-300 p-8">
+        <div class="flex justify-between items-center mb-10">
+            <h3 class="text-white font-bold uppercase tracking-widest text-sm">User Profile</h3>
+            <button onclick="toggleSettings()" class="text-gray-500 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="space-y-6">
+            <div class="space-y-2">
+                <label class="text-[9px] text-gray-500 uppercase">Username</label>
+                <input type="text" id="set-name" value="Abel Rhodes" class="w-full bg-white/5 border border-white/10 p-3 rounded-lg text-white text-xs">
+            </div>
+            <div class="space-y-2">
+                <label class="text-[9px] text-gray-500 uppercase">Email Contact</label>
+                <input type="email" id="set-email" value="info@abelrhodes.com" class="w-full bg-white/5 border border-white/10 p-3 rounded-lg text-white text-xs">
+            </div>
+            <div class="space-y-2">
+                <label class="text-[9px] text-gray-500 uppercase">Language / Idioma</label>
+                <select id="set-lang" onchange="window.BeeI18n.loadTranslations(this.value)" class="w-full bg-white/5 border border-white/10 p-3 rounded-lg text-white text-xs">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="lb">Lëtzebuergesch</option>
+                    <option value="pt">Português</option>
+                </select>
+            </div>
+            <hr class="border-white/5">
+            <div class="space-y-4">
+                <button class="w-full text-left text-[10px] text-gray-400 hover:text-white flex justify-between">
+                    <span>Google Account</span> <span class="text-green-500">Connected</span>
+                </button>
+                <button class="w-full text-left text-[10px] text-gray-400 hover:text-white flex justify-between">
+                    <span>LinkedIn</span> <span class="text-gray-600">Disconnected</span>
+                </button>
+            </div>
+            <div class="pt-10 space-y-4">
+                <a href="#" class="block text-[9px] text-gray-600 hover:text-[#d4af37]">GDPR / Privacy Policy (Luxembourg)</a>
+                <button onclick="deleteAccount()" class="w-full py-3 border border-red-500/30 text-red-500 text-[10px] uppercase font-bold rounded-lg hover:bg-red-500 hover:text-white transition-all">
+                    Eliminar Cuenta & Datos
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center mt-16">
         
         <!-- Left: Static Intel (Stitch Style) -->
         <div class="space-y-8">
             <header class="flex items-center gap-4 mb-12">
                 <img src="assets/welux_eagle_isolated.png" class="eagle-master">
                 <div>
-                    <h1 class="text-2xl font-bold text-white tracking-widest uppercase">BEE <span class="text-[#d4af37]">ARMY</span></h1>
+                    <h1 class="text-2xl font-bold text-white tracking-widest uppercase">AiGotA<span class="text-[#d4af37]">Job</span></h1>
                     <p class="text-[10px] text-gray-500 uppercase font-mono">Profile Activation</p>
                 </div>
             </header>
@@ -70,8 +177,17 @@
             </div>
 
             <p class="text-xs text-gray-500 leading-relaxed max-w-xs">
-                Tu perfil ha sido procesado por el enjambre de Bee Army. Los datos han sido indexados en el ecosistema de inteligencia para una colocación de alta fidelidad.
+                Tu perfil ha sido procesado por el enjambre de AiGotAJob. Los datos han sido indexados en el ecosistema de inteligencia para una colocación de alta fidelidad.
             </p>
+
+            <!-- Call to Action: Moved DNA Validator here -->
+            <div class="cta-box">
+                <h3 class="text-[#d4af37] font-bold mb-2">Validador de ADN Personal</h3>
+                <p class="text-[10px] text-gray-400 mb-4">Verifica si tu web cumple los estándares de Landing Personal para el Enjambre AiGotAJob.</p>
+                <input type="text" id="url-to-validate" placeholder="https://tu-landing.com" class="validator-input">
+                <button onclick="validateDNA()" class="validate-btn">ESCANEAR ADN DIGITAL</button>
+                <div id="validation-result"></div>
+            </div>
         </div>
 
         <!-- Right: Verification Form (Stitch Style) -->
@@ -99,11 +215,76 @@
                     ACTIVAR DASHBOARD COMANDO
                 </button>
             </form>
-            <div class="mt-8 text-center">
-                <span class="text-[10px] text-gray-700 font-mono">Powered by Stitch Design Protocols Hub</span>
+    <!-- Shop / Payment Modal -->
+    <div id="shop-modal" class="modal-overlay">
+        <div class="glass-panel p-10 rounded-2xl max-w-sm text-center border-[#d4af37]">
+            <div class="w-16 h-16 bg-[#d4af37]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-shopping-cart text-[#d4af37] text-2xl"></i>
             </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Landing Page Premium</h2>
+            <p class="text-xs text-gray-400 mb-8">Tu sitio actual no cumple los estándares de seguridad para el enjambre. Crea tu ADN Digital por solo 50€.</p>
+            
+            <div class="bg-white/5 p-4 rounded-xl mb-8 border border-white/10">
+                <div class="flex justify-between items-center text-xs text-gray-300">
+                    <span>Pack: Landing + DNS + Hosting</span>
+                    <span class="font-bold text-[#d4af37]">50.00€</span>
+                </div>
+            </div>
+
+            <button onclick="processPayment()" class="w-full py-4 bg-[#d4af37] text-black font-bold rounded-xl mb-4">
+                PAGAR & ACTIVAR (50€)
+            </button>
+            <button onclick="closeShop()" class="text-[10px] uppercase text-gray-600 hover:text-white">Cancelar</button>
         </div>
     </div>
 
+    <script>
+        function toggleSettings() {
+            const panel = document.getElementById('settings-panel');
+            panel.classList.toggle('translate-x-full');
+        }
+
+        function validateDNA() {
+            const urlInput = document.getElementById('url-to-validate');
+            const resultDiv = document.getElementById('validation-result');
+            const url = urlInput.value.trim();
+            if (!url) return;
+
+            resultDiv.innerHTML = '<span class="text-gray-500 animate-pulse">🛰️ ANALIZANDO ESTRUCTURA...</span>';
+            
+            setTimeout(() => {
+                const isFail = !url.includes('abelrhodes') && !url.includes('portfolio');
+                if (isFail) {
+                    resultDiv.innerHTML = '<span class="result-error">❌ ADN NO COMPATIBLE: ESTRUCTURA INSUFICIENTE</span>';
+                    setTimeout(() => { document.getElementById('shop-modal').style.display = 'flex'; }, 800);
+                } else {
+                    resultDiv.innerHTML = '<span class="result-success">✅ ADN DIGITAL VERIFICADO AL 100%</span>';
+                }
+            }, 1500);
+        }
+
+        function closeShop() { document.getElementById('shop-modal').style.display = 'none'; }
+
+        async function processPayment() {
+            const btn = event.target;
+            btn.innerText = "PROCESANDO PAGO SEGÚN UE...";
+            btn.disabled = true;
+            
+            // Simulación de envío de lead al búnker
+            console.log("SENDING LEAD TO DATABASE AND NOTIFICATION...");
+            
+            setTimeout(() => {
+                alert("Pago procesado con éxito. Se ha enviado el lead a la base de datos central. Notificación enviada al equipo de soporte.");
+                window.location.href = 'client_dashboard.html';
+            }, 2000);
+        }
+
+        function deleteAccount() {
+            if (confirm("⚠️ ¿ESTÁS SEGURO? Esta acción es irreversible y eliminará todos tus leads y perfil bajo normativas GDPR.")) {
+                alert("Enviando solicitud de borrado al búnker...");
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
 </body>
 </html>

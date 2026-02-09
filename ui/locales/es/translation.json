@@ -1,19 +1,19 @@
 {
-    "app_title": "Bee Army | Personal Career Intelligence",
-    "hero_brand": "BEE ARMY",
-    "hero_subtitle": "Personal Career Intelligence",
-    "login_header": "Inicia Sesión en Bee Army",
+    "app_title": "AiGotAJob | Concierge de Carrera Personal",
+    "hero_brand": "AiGotAJob",
+    "hero_subtitle": "Concierge de Carrera Personal",
+    "login_header": "Inicia Sesión en AiGotAJob",
     "btn_google": "Continuar con Google",
     "btn_facebook": "Continuar con Facebook",
     "btn_linkedin": "Conectar con LinkedIn",
     "validator_title": "Validador de ADN Personal",
-    "validator_desc": "Verifica si tu web cumple los estándares de Landing Personal para el Enjambre Bee Army.",
+    "validator_desc": "Verifica si tu web cumple los estándares de Landing Personal para el Enjambre AiGotAJob.",
     "validator_placeholder": "https://tu-landing.com",
     "validator_btn": "ESCANEAR ADN DIGITAL",
-    "footer_cloud": "BEE ARMY NEXUS CLOUD",
+    "footer_cloud": "AIGOTAJOB NEXUS CLOUD",
     "footer_isolation": "DATA ISOLATION: ON",
-    "overlay_title": "Bee Army Systems Active",
+    "overlay_title": "AiGotAJob Systems Active",
     "overlay_status": "Iniciando verificación biométrica...",
-    "onboarding_header": "Profile Activation",
-    "dashboard_header": "Bee Army Enjambre"
+    "onboarding_header": "Activation de Perfil",
+    "dashboard_header": "AiGotAJob"
 }
