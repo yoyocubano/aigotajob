@@ -3,148 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AiGotAJob | VIP Access</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>AiGotAJob | Career Concierge (WeLux Edition)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .entrance-container {
-            text-align: center;
-            max-width: 500px;
-            z-index: 10;
+        :root {
+            --bg-dark: #050505;
+            --text-primary: #f0f0f0;
+            --gold-accent: #d4af37;
+            --gold-gradient: linear-gradient(135deg, #d4af37, #f2d06b, #d4af37);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border-gold: 1px solid rgba(212, 175, 55, 0.2);
         }
-        .magic-orb {
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, #00d4ff, #8a2be2);
-            border-radius: 50%;
-            margin: 0 auto 40px;
-            filter: blur(10px);
-            animation: pulse 3s infinite;
-            box-shadow: 0 0 50px rgba(138, 43, 226, 0.5);
+        body {
+            margin: 0;
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop'); 
+            background-blend-mode: overlay;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(10,10,10,0.8), #000);
+            z-index: -1;
+        }
+        .portal-card {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(25px);
+            border: var(--border-gold);
+            padding: 60px;
+            text-align: center;
+            max-width: 600px;
+            margin-top: 8vh;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
             position: relative;
         }
-        .magic-orb::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            height: 90%;
-            border: 2px solid white;
-            border-radius: 50%;
-            animation: spin 10s linear infinite;
-            opacity: 0.5;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; filter: blur(15px); }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        
-        .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .logo-img {
             width: 100%;
-            padding: 16px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 450px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.1));
+        }
+        p {
+            font-size: 1.2rem;
+            color: #ccc;
+            font-weight: 300;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Playfair Display', serif;
+        }
+        .luxury-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: white;
+            font-family: 'Lato', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
-        .social-btn i { font-size: 1.4rem; margin-right: 15px; }
-        
-        .btn-google { background: rgba(255, 255, 255, 0.1); color: white; }
-        .btn-google:hover { background: rgba(255, 255, 255, 0.2); box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
-        
-        .btn-facebook { background: rgba(24, 119, 242, 0.2); color: #fff; border-color: rgba(24, 119, 242, 0.4); }
-        .btn-facebook:hover { background: rgba(24, 119, 242, 0.4); box-shadow: 0 0 20px rgba(24, 119, 242, 0.4); }
-        
-        .btn-linkedin { background: rgba(10, 102, 194, 0.2); color: #fff; border-color: rgba(10, 102, 194, 0.4); }
-        .btn-linkedin:hover { background: rgba(10, 102, 194, 0.4); box-shadow: 0 0 20px rgba(10, 102, 194, 0.4); }
-
-        .scan-line {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: #00ff88;
-            box-shadow: 0 0 15px #00ff88;
-            z-index: 100;
-            display: none;
-            animation: scan 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        .luxury-btn:hover {
+            border-color: var(--gold-accent);
+            background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+            transform: scale(1.02);
         }
-        @keyframes scan {
-            0% { top: 0; height: 2px; opacity: 1; }
-            50% { opacity: 1; height: 5px; box-shadow: 0 0 30px #00ff88; }
-            100% { top: 100%; height: 2px; opacity: 0; }
-        }
+        .luxury-btn i { margin-right: 15px; color: var(--gold-accent); }
         
-        h2 { font-weight: 300; letter-spacing: 2px; margin-bottom: 40px; opacity: 0.9; }
-        .vip-badge { 
-            position: absolute; top: -15px; right: -15px; 
-            background: #ffd700; color: #000; font-weight: bold; 
-            padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            z-index: 20;
+        .footer-note {
+            margin-top: 50px;
+            font-size: 0.65rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 4px;
         }
     </style>
 </head>
 <body>
-    <div class="scan-line" id="scanner"></div>
-    
-    <div class="main-container entrance-container">
-        <div class="vip-badge">VIP ENTRANCE</div>
-        <div class="magic-orb"></div>
-        <h1><img src="logo.png" alt="Akamara Logo" style="height: 60px; vertical-align: middle;"> AiGotAJob <span style="font-weight:300;">Portal</span></h1>
-        <h2>AUTHENTICATE IDENTITY</h2>
+    <div class="overlay"></div>
+
+    <div class="portal-card">
+        <!-- Original Stitch-Style Logo with Stone base and integrated typography -->
+        <img src="/Users/yoyocubano/.gemini/antigravity/brain/aefc49bb-149d-46db-98ae-d38febf6939d/aigotajob_gold_logo_real_1770597715608.png" alt="AiGotAJob Master Logo" class="logo-img">
         
-        <button class="social-btn btn-google" onclick="enterMatrix('Google')">
-            <i class="fa-brands fa-google"></i> Continue with Google
+        <p>Private Career Concierge Service</p>
+
+        <button class="luxury-btn">
+            <i class="fa-brands fa-google"></i> Authenticate via Google
         </button>
         
-        <button class="social-btn btn-facebook" onclick="enterMatrix('Facebook')">
-            <i class="fa-brands fa-facebook-f"></i> Continue with Facebook
+        <button class="luxury-btn">
+            <i class="fa-brands fa-linkedin"></i> Import Professional Portfolio
         </button>
-        
-        <button class="social-btn btn-linkedin" onclick="enterMatrix('LinkedIn')">
-            <i class="fa-brands fa-linkedin-in"></i> Continue with LinkedIn
-        </button>
-        
-        <p style="margin-top: 30px; font-size: 0.9rem; color: rgba(255,255,255,0.4);">
-            <i class="fa-solid fa-lock"></i> AES-256 Encrypted Connection
-        </p>
+
+        <div class="footer-note">
+            Akamara Network • Secure Operating Protocol
+        </div>
     </div>
-
-    <script>
-        function enterMatrix(provider) {
-            // Visual Feedback
-            const btn = event.currentTarget;
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Syncing ${provider} Data...`;
-            btn.style.opacity = '1';
-            
-            // Trigger Scanner
-            document.getElementById('scanner').style.display = 'block';
-            
-            // Sound Effect (Simulated via console for now)
-            console.log("🔊 PROTOCOL INITIATED");
-
-            setTimeout(() => {
-                window.location.href = 'onboarding.html';
-            }, 2000);
-        }
-    </script>
 </body>
 </html>
