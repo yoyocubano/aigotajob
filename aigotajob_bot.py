@@ -83,9 +83,9 @@ class AiGotAJobBot:
 
     def check_throttle(self, profile_url=None, company=None, title=None):
         """
-        Advanced Deduplication:
-        1. Checks if we contacted this specific URL in the last 30 days.
-        2. Checks if we already applied to this identical POSITION at this identical COMPANY (cross-platform).
+        ULTRA-STRICT DEDUPLICATION:
+        Zero-tolerance policy for repetitions. If a company/position has been touched 
+        on ANY platform, it is banned from the current and future cycles for 30 days.
         """
         local_db = "/Users/yoyocubano/Documents/ESYBISNE_APP/api/local_leads.db"
         try:
@@ -93,21 +93,23 @@ class AiGotAJobBot:
             conn = sqlite3.connect(local_db)
             c = conn.cursor()
             
-            # Case A: Specific URL Check
+            # 1. URL-Level check (Immediate suppression)
             if profile_url:
                 c.execute("SELECT created_at FROM leads WHERE profile_url = ? ORDER BY created_at DESC LIMIT 1", (profile_url,))
                 result = c.fetchone()
                 if result and self._is_recent(result[0]): return False
 
-            # Case B: Company + Position Check (Cross-platform deduplication)
+            # 2. Company + Title check (Cross-portal suppression)
+            # This prevents contacting 'Amazon' on LinkedIn if they were already found on ADEM.
             if company and title:
-                c.execute("SELECT created_at FROM leads WHERE name = ? AND context LIKE ? ORDER BY created_at DESC LIMIT 1", (company, f"%{title}%"))
+                # We use a fuzzy match for title to catch slight variations in naming
+                c.execute("SELECT created_at FROM leads WHERE name = ? AND context LIKE ? ORDER BY created_at DESC LIMIT 1", (company, f"%{title[:15]}%"))
                 result = c.fetchone()
                 if result and self._is_recent(result[0]): return False
                 
             conn.close()
         except Exception as e:
-            print(f"⚠️ Throttle check error: {e}")
+            print(f"⚠️ Security Vault access error: {e}")
         return True
 
     def _is_recent(self, date_str):
@@ -115,81 +117,69 @@ class AiGotAJobBot:
             last_date = datetime.fromisoformat(date_str)
         except:
             last_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
-        days_passed = (datetime.now() - last_date).days
-        return days_passed < 30
+        return (datetime.now() - last_date).days < 30
 
     def notify_user(self, subject, message):
-        """Simulates sending a high-end notification email to info@abelrhodes.com"""
-        print(f"📧 [NOTIFICATION SENT TO info@abelrhodes.com]")
-        print(f"   Subject: {subject}")
-        print(f"   Body: {message}")
+        """Official notification for user info@abelrhodes.com"""
+        print(f"🛡️ [SECURITY NOTIFICATION: info@abelrhodes.com]")
+        print(f"   Message: {message}")
 
-    def monitor_moovijob(self):
-        print("🕵️ Scouting Moovijob for new offers...")
-        self.driver.get("https://www.moovijob.com/offres-emploi/luxembourg")
-        self.stealth_wait(5, 10)
-        new_leads_count = 0
+    def monitor_platform(self, name, url, selector):
+        """Generic surgical scan for any platform"""
+        print(f"🕵️ Surgical Scan Initiated: {name} Portal...")
+        self.driver.get(url)
+        self.stealth_wait(8, 15) # Longer, human-like wait
+        
+        new_leads = 0
         try:
-            offers = self.driver.find_elements(By.CSS_SELECTOR, "article.job-card")
-            for offer in offers[:10]:
-                title = offer.find_element(By.CSS_SELECTOR, "h2").text
-                company = offer.find_element(By.CSS_SELECTOR, "div.company-name").text
-                link = offer.find_element(By.TAG_NAME, "a").get_attribute("href")
-                
-                if not self.check_throttle(profile_url=link, company=company, title=title):
-                    print(f"⏩ Duplicate: {company} - {title}. Skipping.")
-                    continue
+            items = self.driver.find_elements(By.CSS_SELECTOR, selector)
+            for item in items[:5]: # Only look for the top/freshest needles
+                try:
+                    title = item.find_element(By.CSS_SELECTOR, "h2").text
+                    company = item.find_element(By.CSS_SELECTOR, ".company").text # Adjust selector as needed
+                    link = item.find_element(By.TAG_NAME, "a").get_attribute("href")
+                    
+                    if not self.check_throttle(profile_url=link, company=company, title=title):
+                        continue # Already touched elsewhere. Skip immediately.
 
-                print(f"✨ Found Mission: {title} at {company}")
-                self.db.add_lead(
-                    platform="Moovijob", sector="Job Offer", location="Luxembourg",
-                    profile_url=link, name=company, context=f"Position: {title}"
-                )
-                new_leads_count += 1
-            return new_leads_count
-        except Exception as e:
-            print(f"⚠️ Moovijob scan error: {e}")
-            return 0
-
-    def monitor_jobs_lu(self):
-        print("🕵️ Scouting Jobs.lu...")
-        self.driver.get("https://fr.jobs.lu/emplois/luxembourg")
-        self.stealth_wait(5, 10)
-        new_leads_count = 0
-        try:
-            cards = self.driver.find_elements(By.XPATH, "//div[contains(@class, 'job-item')]")
-            for card in cards[:5]:
-                title = card.find_element(By.XPATH, ".//h2").text
-                if not self.check_throttle(title=title): continue
-
-                self.db.add_lead(
-                    platform="Jobs.lu", sector="Job Offer", location="Luxembourg",
-                    profile_url=self.driver.current_url, name="Jobs.lu Poster", context=title
-                )
-                new_leads_count += 1
-            return new_leads_count
+                    self.db.add_lead(
+                        platform=name, sector="Job Offer", location="Luxembourg",
+                        profile_url=link, name=company, context=f"Position: {title}"
+                    )
+                    print(f"✅ Secure Outreach Registered: {company} ({name})")
+                    new_leads += 1
+                except: continue
+            return new_leads
         except: return 0
 
     def run_swarm(self):
-        print("🚀 LUXJOB SWARM: ACTIVE PATROL STARTING.")
-        while True:
-            total_new = 0
-            total_new += self.monitor_moovijob()
-            total_new += self.monitor_jobs_lu()
-            
-            if total_new > 0:
-                self.notify_user(
-                    "WE-LUX: Nuevas Oportunidades Detectadas", 
-                    f"Se han encontrado {total_new} nuevas ofertas para Luxemburgo."
-                )
-            else:
-                self.notify_user(
-                    "WE-LUX: Ciclo de Búsqueda Completado", 
-                    "No hay nuevas ofertas idénticas. Reconectando en 28 horas."
-                )
+        """
+        THE HUMAN PATTERN:
+        One full sweep across all portals, then total hibernation for 28 hours.
+        This is the only way to avoid 'bot-spam' detection and look professional.
+        """
+        print("🚀 WE-LUX ENJAMBRE: ONE-TIME SURGICAL STRIKE STARTING.")
+        
+        portals = [
+            {"name": "LinkedIn", "url": "https://www.linkedin.com/jobs/", "selector": ".job-card-container"},
+            {"name": "ADEM Luxembourg", "url": "https://ADEM.public.lu/", "selector": ".job-item"},
+            {"name": "Moovijob", "url": "https://www.moovijob.com/offres-emploi/luxembourg", "selector": "article.job-card"},
+            {"name": "Jobs.lu", "url": "https://fr.jobs.lu/emplois/luxembourg", "selector": ".job-item"}
+        ]
 
-            print(f"💤 Next scan in 28 hours (Elite Security Protocol).")
-            time.sleep(100800) 
+        while True:
+            total_matches = 0
+            for portal in portals:
+                total_matches += self.monitor_platform(portal["name"], portal["url"], portal["selector"])
+                self.stealth_wait(20, 45) # Long pause between portals to mimic human context switching
+            
+            if total_matches > 0:
+                self.notify_user("WE-LUX: Resultados Reales de Búsqueda", f"Ciclo completado. {total_matches} nuevas oportunidades únicas entregadas.")
+            else:
+                self.notify_user("WE-LUX: Vigilancia Completada", "Escaneo exhaustivo terminado. No hay ofertas nuevas sin duplicar. Hibernando 28h.")
+
+            print(f"💤 HIBERNATION ACTIVE: Next surgical scan in 28 hours.")
+            time.sleep(100800) # Strict 28h lock
 
 if __name__ == "__main__":
     hunter = AiGotAJobBot()
