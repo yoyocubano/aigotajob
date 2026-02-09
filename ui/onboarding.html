@@ -1,137 +1,189 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AiGotAJob | CV Onboarding</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-  <div class="main-container">
-    <div class="glass-header">
-      <div class="logo">🦅 AiGotAJob <span class="badge">PRO</span></div>
-      <div class="step-indicator">Step 1 of 3: Digital Profile</div>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AiGotAJob | CV Onboarding</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="glass-header">
+        <div class="logo">
+          <img src="logo.png" alt="Akamara Logo" /> AiGotAJob
+          <span class="badge">PRO</span>
+        </div>
+        <div class="step-indicator">Step 1 of 3: Digital Profile</div>
+      </div>
 
-    <div class="content-wrapper">
-      <div class="promo-column">
-        <h1>Stop Applying.<br><span class="highlight">Start Getting Headhunted.</span></h1>
-        <p>Your PDF CV is invisible to recruiters. Build your <strong>Modern CV Landing Page</strong> in 2 minutes and dominate the Luxembourg job market.</p>
-        
-        <div class="feature-list">
-          <div class="feature-item">
-            <i class="fa-brands fa-linkedin"></i>
-            <span>One-Click Recruit Connectivity</span>
-          </div>
-          <div class="feature-item">
-            <i class="fa-solid fa-rocket"></i>
-            <span>SEO Optimized for "Luxembourg Jobs"</span>
-          </div>
-          <div class="feature-item">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            <span>AI-Enhanced Bio Writing</span>
+      <div class="content-wrapper">
+        <div class="promo-column">
+          <h1>
+            Stop Applying.<br /><span class="highlight"
+              >Start Getting Headhunted.</span
+            >
+          </h1>
+          <p>
+            Your PDF CV is invisible to recruiters. Build your
+            <strong>Modern CV Landing Page</strong> in 2 minutes and dominate
+            the Luxembourg job market.
+          </p>
+
+          <div class="feature-list">
+            <div class="feature-item">
+              <i class="fa-brands fa-linkedin"></i>
+              <span>One-Click Recruit Connectivity</span>
+            </div>
+            <div class="feature-item">
+              <i class="fa-solid fa-rocket"></i>
+              <span>SEO Optimized for "Luxembourg Jobs"</span>
+            </div>
+            <div class="feature-item">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>AI-Enhanced Bio Writing</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="form-column">
-        <form class="glass-form" onsubmit="event.preventDefault(); window.location.href='client_dashboard.html';">
-          <h2>Your Professional Setup</h2>
-          
-          <button type="button" class="linkedin-import-btn" onclick="simulateLinkedInImport(this)">
-            <i class="fa-brands fa-linkedin"></i> Auto-Fill from LinkedIn
-          </button>
+        <div class="form-column">
+          <form
+            class="glass-form"
+            onsubmit="
+              event.preventDefault();
+              window.location.href = 'client_dashboard.html';
+            "
+          >
+            <h2>Your Professional Setup</h2>
 
-          <div class="divider"><span>OR MANUAL ENTRY</span></div>
+            <button
+              type="button"
+              class="linkedin-import-btn"
+              onclick="simulateLinkedInImport(this)"
+            >
+              <i class="fa-brands fa-linkedin"></i> Auto-Fill from LinkedIn
+            </button>
 
-          <div class="input-group">
-            <label>Full Name</label>
-            <input type="text" id="fullName" placeholder="e.g. Alex Mercer" required>
-          </div>
+            <div class="divider"><span>OR MANUAL ENTRY</span></div>
 
-          <div class="input-group">
-            <label>Target Role / Title</label>
-            <input type="text" id="role" placeholder="e.g. Senior Electrician / Software Engineer" required>
-          </div>
-
-          <div class="input-group">
-            <label>LinkedIn URL (Crucial)</label>
-            <div class="input-wrapper">
-              <i class="fa-brands fa-linkedin input-icon"></i>
-              <input type="url" id="linkedinUrl" placeholder="https://linkedin.com/in/yourname">
-            </div>
-          </div>
-
-          <div class="row">
             <div class="input-group">
-              <label>WhatsApp / Phone</label>
+              <label>Full Name</label>
+              <input
+                type="text"
+                id="fullName"
+                placeholder="e.g. Alex Mercer"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>Target Role / Title</label>
+              <input
+                type="text"
+                id="role"
+                placeholder="e.g. Senior Electrician / Software Engineer"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <label>LinkedIn URL (Crucial)</label>
               <div class="input-wrapper">
-                <i class="fa-brands fa-whatsapp input-icon"></i>
-                <input type="tel" id="phone" placeholder="+352 691 000 000">
+                <i class="fa-brands fa-linkedin input-icon"></i>
+                <input
+                  type="url"
+                  id="linkedinUrl"
+                  placeholder="https://linkedin.com/in/yourname"
+                />
               </div>
             </div>
-            <div class="input-group">
-              <label>Portfolio / Website</label>
-              <div class="input-wrapper">
-                <i class="fa-solid fa-globe input-icon"></i>
-                <input type="url" id="portfolio" placeholder="https://mywork.com">
+
+            <div class="row">
+              <div class="input-group">
+                <label>WhatsApp / Phone</label>
+                <div class="input-wrapper">
+                  <i class="fa-brands fa-whatsapp input-icon"></i>
+                  <input type="tel" id="phone" placeholder="+352 691 000 000" />
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Portfolio / Website</label>
+                <div class="input-wrapper">
+                  <i class="fa-solid fa-globe input-icon"></i>
+                  <input
+                    type="url"
+                    id="portfolio"
+                    placeholder="https://mywork.com"
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="input-group">
-            <label>Professional Bio (AI will polish this)</label>
-            <textarea id="bio" rows="4" placeholder="Tell us about your experience, key skills, and what you are looking for in Luxembourg..."></textarea>
-          </div>
+            <div class="input-group">
+              <label>Professional Bio (AI will polish this)</label>
+              <textarea
+                id="bio"
+                rows="4"
+                placeholder="Tell us about your experience, key skills, and what you are looking for in Luxembourg..."
+              ></textarea>
+            </div>
 
-          <button type="submit" class="cta-button">
-            🚀 Generate My Landing Page <span class="price-tag">ACTIVATED</span>
-          </button>
-        </form>
+            <button type="submit" class="cta-button">
+              🚀 Generate My Landing Page
+              <span class="price-tag">ACTIVATED</span>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    function simulateLinkedInImport(btn) {
+    <script>
+      function simulateLinkedInImport(btn) {
         // Visual Feedback - Step 1
         const originalText = btn.innerHTML;
         btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Connecting to LinkedIn API...`;
-        btn.style.opacity = '0.8';
+        btn.style.opacity = "0.8";
         btn.disabled = true;
 
         // Simulated Delay 1 - Connection
         setTimeout(() => {
-            btn.innerHTML = `<i class="fa-solid fa-download fa-bounce"></i> Extracting Profile Data...`;
-            
-            // Simulated Delay 2 - Extraction
-            setTimeout(() => {
-                // Populate Fields with "Extracted" Data
-                document.getElementById('fullName').value = "Alex Mercer";
-                document.getElementById('role').value = "Senior Project Manager";
-                document.getElementById('linkedinUrl').value = "https://linkedin.com/in/alexmercer-lux";
-                document.getElementById('phone').value = "+352 691 555 123";
-                document.getElementById('portfolio').value = "https://alexmercer.dev";
-                document.getElementById('bio').value = "Experienced Project Manager with 7+ years in IT infrastructure. Specializing in Agile methodologies and cloud migration. Seeking leadership roles in Luxembourg's financial sector.";
+          btn.innerHTML = `<i class="fa-solid fa-download fa-bounce"></i> Extracting Profile Data...`;
 
-                // Success State
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Data Imported Successfully`;
-                btn.style.background = '#00ff88';
-                btn.style.color = '#000';
-                btn.style.borderColor = '#00ff88';
-                
-                // Highlight fields slightly to show change
-                const inputs = document.querySelectorAll('input, textarea');
-                inputs.forEach(input => {
-                    input.style.borderColor = '#00ff88';
-                    setTimeout(() => input.style.borderColor = '', 1000); // Revert after 1s
-                });
+          // Simulated Delay 2 - Extraction
+          setTimeout(() => {
+            // Populate Fields with "Extracted" Data
+            document.getElementById("fullName").value = "Alex Mercer";
+            document.getElementById("role").value = "Senior Project Manager";
+            document.getElementById("linkedinUrl").value =
+              "https://linkedin.com/in/alexmercer-lux";
+            document.getElementById("phone").value = "+352 691 555 123";
+            document.getElementById("portfolio").value =
+              "https://alexmercer.dev";
+            document.getElementById("bio").value =
+              "Experienced Project Manager with 7+ years in IT infrastructure. Specializing in Agile methodologies and cloud migration. Seeking leadership roles in Luxembourg's financial sector.";
 
-            }, 2000);
+            // Success State
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> Data Imported Successfully`;
+            btn.style.background = "#00ff88";
+            btn.style.color = "#000";
+            btn.style.borderColor = "#00ff88";
+
+            // Highlight fields slightly to show change
+            const inputs = document.querySelectorAll("input, textarea");
+            inputs.forEach((input) => {
+              input.style.borderColor = "#00ff88";
+              setTimeout(() => (input.style.borderColor = ""), 1000); // Revert after 1s
+            });
+          }, 2000);
         }, 1500);
-    }
-  </script>
-</body>
+      }
+    </script>
+  </body>
 </html>

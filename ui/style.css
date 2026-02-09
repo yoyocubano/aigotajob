@@ -73,11 +73,17 @@ body {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #fff, var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: white; /* Fallback for text if needed */
+}
+.logo img {
+  height: 50px; /* Adjust size as needed */
+  width: auto;
+  object-fit: contain;
 }
 
 .badge {
