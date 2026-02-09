@@ -35,11 +35,19 @@ from api.esybisne_db import LeadManager
 from neural_response_engine import get_automated_response
 
 class AiGotAJobBot:
-    def __init__(self):
+    def __init__(self, user_email="info@abelrhodes.com"):
+        self.user_email = user_email
         self.vault = self.load_vault()
         self.db = LeadManager()
+        self.state_file = f"/Users/yoyocubano/Documents/AIGOTAJOB/state_{user_email.replace('@', '_')}.json"
         self.driver = self.setup_driver()
-        print("🦅 AiGotAJob Bot Initialized. Target: Luxembourg.")
+        self._init_state()
+        print(f"🦅 AiGotAJob HARDENED. Target: Luxembourg. User: {user_email}. Stealth: ACTIVE.", flush=True)
+
+    def _init_state(self):
+        if not os.path.exists(self.state_file):
+            with open(self.state_file, 'w') as f:
+                json.dump({"last_scan": None, "total_leads_found": 0}, f)
 
     def load_vault(self):
         with open(VAULT_PATH, 'r') as f:
@@ -47,39 +55,46 @@ class AiGotAJobBot:
 
     def setup_driver(self):
         options = Options()
+        # Connection to Commander Browser
         options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
         service = Service(executable_path=DRIVER_PATH)
         try:
             driver = webdriver.Chrome(service=service, options=options)
-            print("✅ Connected to Comandante's Browser.")
+            driver.set_page_load_timeout(30)
             return driver
         except:
-            print("⚠️ Browser not found on port 9222. Please run ESYBISNE_START.py first.")
+            print("⚠️ Error: Browser on Port 9222 not available. Run ESYBISNE_START.py.", flush=True)
             sys.exit(1)
 
-    def stealth_wait(self, min_s=3, max_s=10):
-        time.sleep(random.uniform(min_s, max_s))
+    def stealth_wait(self, min_s=30, max_s=120):
+        """Variable wait times and random jitters - HUMAN PACE"""
+        t = random.uniform(min_s, max_s)
+        print(f"🕵️ Stealth Pause: {t:.1f}s (Simulando ritmo humano)...", flush=True)
+        time.sleep(t)
 
-    def login_adem(self):
-        print("🔑 Accessing ADEM Portal...")
-        creds = self.vault["ADEM"]
-        self.driver.get(creds["url"])
-        self.stealth_wait(4, 7)
-        # Login logic here (simplified for now)
+    def human_scroll(self):
+        """Randomized scrolling to mimic reading behavior"""
+        total_height = self.driver.execute_script("return document.body.scrollHeight")
+        viewport_height = self.driver.execute_script("return window.innerHeight")
+        for _ in range(random.randint(2, 4)):
+            scroll_point = random.randint(100, min(total_height, 1500))
+            self.driver.execute_script(f"window.scrollTo({{top: {scroll_point}, behavior: 'smooth'}});")
+            time.sleep(random.uniform(1, 3))
+
+    def safe_click(self, by, value, timeout=10):
+        """Robust click with retry and wait"""
         try:
-            # ADEM often uses a 'Login' button that redirects
-            login_btn = self.driver.find_element(By.XPATH, "//a[contains(text(), 'Connexion') or contains(text(), 'Login')]")
-            login_btn.click()
-            self.stealth_wait(3, 5)
-            # Find fields based on known patterns
-            user_field = self.driver.find_element(By.ID, "username") or self.driver.find_element(By.NAME, "user")
-            user_field.send_keys(creds["user"])
-            pass_field = self.driver.find_element(By.ID, "password") or self.driver.find_element(By.NAME, "password")
-            pass_field.send_keys(creds["pass"])
-            self.driver.find_element(By.XPATH, "//button[@type='submit']").click()
-            print("✅ ADEM Login Successful.")
-        except:
-            print("⚠️ ADEM Login failed or already logged in.")
+            element = WebDriverWait(self.driver, timeout).until(
+                EC.element_to_be_clickable((by, value))
+            )
+            # Move mouse to element first (simulated)
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+            time.sleep(1)
+            element.click()
+            return True
+        except Exception as e:
+            print(f"⚠️ SafeClick Error for {value}")
+            return False
 
     def check_throttle(self, profile_url=None, company=None, title=None):
         """
@@ -119,67 +134,205 @@ class AiGotAJobBot:
             last_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
         return (datetime.now() - last_date).days < 30
 
-    def notify_user(self, subject, message):
-        """Official notification for user info@abelrhodes.com"""
-        print(f"🛡️ [SECURITY NOTIFICATION: info@abelrhodes.com]")
-        print(f"   Message: {message}")
+    def validate_location(self, item_element):
+        """Strict validation: Must be physically in Luxembourg"""
+        text = item_element.get_attribute("textContent").lower()
+        # Broad check for Luxembourg identifiers - EXTREME RIGOR
+        lux_keys = ["luxembourg", "luxemburgo", "luxemburg", " l- ", "capellen", "esch-sur-alzette", "mamer", "bertrange"]
+        if any(key in text for key in lux_keys):
+            return True
+        return False
 
-    def monitor_platform(self, name, url, selector):
-        """Generic surgical scan for any platform"""
-        print(f"🕵️ Surgical Scan Initiated: {name} Portal...")
-        self.driver.get(url)
-        self.stealth_wait(8, 15) # Longer, human-like wait
+    def notify_user(self, subject, message, is_hibernation=False, leads=None):
+        """Official notification for user and Local Dashboard"""
+        js_file = "/Users/yoyocubano/Documents/AIGOTAJOB/ui/real_results.js"
         
-        new_leads = 0
+        # EMAIL CONFIG
+        EMAIL_SENDER = "yucolaguilar@gmail.com"
+        EMAIL_PASSWORD = "uosv vbjq hgju jatt" 
+        EMAIL_RECIPIENTS = ["yucolaguilar@gmail.com", "info@abelrhodes.com"]
+
+        report_entry = {
+            "timestamp": datetime.now().strftime("%H:%M:%S"),
+            "subject": subject,
+            "message": message,
+            "type": "hibernation" if is_hibernation else "match"
+        }
+        
+        # Update JS file for Dashboard
         try:
-            items = self.driver.find_elements(By.CSS_SELECTOR, selector)
-            for item in items[:5]: # Only look for the top/freshest needles
+            reports = []
+            if os.path.exists(js_file):
+                with open(js_file, 'r') as f:
+                    content = f.read()
+                    json_str = content.replace("const realResults = ", "").strip().rstrip(";")
+                    if json_str:
+                        reports = json.loads(json_str)
+            
+            reports.append(report_entry)
+            reports = reports[-15:]
+            with open(js_file, 'w') as f:
+                f.write(f"const realResults = {json.dumps(reports, indent=4)};")
+        except: pass
+
+        # SEND REAL EMAIL
+        try:
+            import smtplib
+            from email.mime.text import MIMEText
+            
+            lead_details = ""
+            if leads:
+                lead_details = "\n\n🚀 HALLAZGOS ENCONTRADOS:\n" + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                for i, lead in enumerate(leads, 1):
+                    lead_details += f"{i}. {lead['company'].upper()}\n"
+                    lead_details += f"   Puesto: {lead['title']}\n"
+                    lead_details += f"   Enlace: {lead['link']}\n"
+                    lead_details += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+
+            email_body = f"🦅 NOTIFICACIÓN AIGOTAJOB - PERFIL COMANDO\n\nASUNTO: {subject}\nMENSAJE: {message}{lead_details}\n\nHora: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\nAntigravity Core AI"
+            msg = MIMEText(email_body)
+            msg['Subject'] = f"🦅 [AIGOTAJOB] {subject}"
+            msg['From'] = EMAIL_SENDER
+            msg['To'] = ", ".join(EMAIL_RECIPIENTS)
+
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+            server.sendmail(EMAIL_SENDER, EMAIL_RECIPIENTS, msg.as_string())
+            server.quit()
+            print(f"📧 EMAILS ENVIADOS EXITOSAMENTE A: {', '.join(EMAIL_RECIPIENTS)}", flush=True)
+        except Exception as e:
+            print(f"❌ FALLO AL ENVIAR EMAIL: {e}", flush=True)
+
+        print(f"🛡️ [SECURITY NOTIFICATION: info@abelrhodes.com]", flush=True)
+        print(f"   Subject: {subject}", flush=True)
+        print(f"   Message: {message}", flush=True)
+
+    def monitor_platform(self, name, url, config):
+        """Generic surgical scan for any platform"""
+        print(f"🕵️ Surgical Scan Initiated: {name} Portal...", flush=True)
+        found_leads = []
+        try:
+            self.driver.get(url)
+            self.stealth_wait(5, 12)
+            self.human_scroll() # Mimic reading the results
+            
+            limit = 5 
+            
+            items = self.driver.find_elements(By.CSS_SELECTOR, config["container"])
+            if not items:
+                print(f"   ⚠️ No items found on {name}. Current selectors may be stale.", flush=True)
+                return []
+
+            for item in items[:limit]:
                 try:
-                    title = item.find_element(By.CSS_SELECTOR, "h2").text
-                    company = item.find_element(By.CSS_SELECTOR, ".company").text # Adjust selector as needed
-                    link = item.find_element(By.TAG_NAME, "a").get_attribute("href")
+                    # Smart Text Hunt (Using textContent for robustness)
+                    def get_clean_text(el, selector):
+                        try:
+                            target = el.find_element(By.CSS_SELECTOR, selector)
+                            # Using get_attribute("textContent") as it's more reliable than .text for some drivers
+                            text = target.get_attribute("textContent").strip()
+                            if not text:
+                                text = target.get_attribute("title") or target.get_attribute("aria-label")
+                            return text or ""
+                        except: return ""
+
+                    title = get_clean_text(item, config["title"])
+                    company = get_clean_text(item, config["company"])
                     
+                    if not title:
+                         title = get_clean_text(item, "h2, h3, h4, h1, .title")
+                    
+                    if config.get("link") == "self":
+                        link = item.get_attribute("href")
+                    else:
+                        link = item.find_element(By.CSS_SELECTOR, config["link"]).get_attribute("href")
+                    
+                    if not title or not link: continue
+                    
+                    # MANDATORY LUXEMBOURG CHECK
+                    if not self.validate_location(item):
+                         print(f"   ⏩ Skipping non-Luxembourg result: {company}", flush=True)
+                         continue
+
                     if not self.check_throttle(profile_url=link, company=company, title=title):
-                        continue # Already touched elsewhere. Skip immediately.
+                        continue 
 
                     self.db.add_lead(
                         platform=name, sector="Job Offer", location="Luxembourg",
-                        profile_url=link, name=company, context=f"Position: {title}"
+                        profile_url=link, name=company, context=f"Position: {title}",
+                        user_id=self.user_email
                     )
-                    print(f"✅ Secure Outreach Registered: {company} ({name})")
-                    new_leads += 1
+                    print(f"✅ Secure Outreach Registered: {company} ({name})", flush=True)
+                    found_leads.append({"company": company, "title": title, "link": link})
+                    # Small wait between processing items to look human
+                    time.sleep(random.uniform(1.5, 4))
                 except: continue
-            return new_leads
-        except: return 0
+            return found_leads
+        except Exception as e:
+            err_msg = f"❌ Error Crítico en {name}: {e}"
+            print(err_msg, flush=True)
+            self.notify_user("ALERTA DE SISTEMA: Fallo en Plataforma", f"Se detectó un problema en {name} que requiere asistencia técnica. Detalle: {e}")
+            return []
 
     def run_swarm(self):
         """
         THE HUMAN PATTERN:
         One full sweep across all portals, then total hibernation for 28 hours.
-        This is the only way to avoid 'bot-spam' detection and look professional.
         """
-        print("🚀 WE-LUX ENJAMBRE: ONE-TIME SURGICAL STRIKE STARTING.")
+        # PERFIL HÍBRIDO: ABEL RHODES (Ingeniería + Cine)
+        PROFILE_KEYWORDS = [
+            "Ingénieur Électricien", 
+            "KNX", 
+            "AI Engineer",
+            "Video Editor DaVinci",
+            "Director of Photography",
+            "Creative Director"
+        ]
+
+        print(f"🚀 AIGOTAJOB ENJAMBRE: INICIANDO BÚSQUEDA PARA PERFIL: Abel Rhodes")
         
-        portals = [
-            {"name": "LinkedIn", "url": "https://www.linkedin.com/jobs/", "selector": ".job-card-container"},
-            {"name": "ADEM Luxembourg", "url": "https://ADEM.public.lu/", "selector": ".job-item"},
-            {"name": "Moovijob", "url": "https://www.moovijob.com/offres-emploi/luxembourg", "selector": "article.job-card"},
-            {"name": "Jobs.lu", "url": "https://fr.jobs.lu/emplois/luxembourg", "selector": ".job-item"}
+        platforms = [
+            {
+                "name": "LinkedIn", 
+                "base_url": "https://www.linkedin.com/jobs/search/?location=Luxembourg&keywords=", 
+                "config": {"container": ".job-card-container", "title": "h3", "company": ".artdeco-entity-lockup__subtitle", "link": "a.job-card-list__title"}
+            },
+            {
+                "name": "ADEM Luxembourg", 
+                "base_url": "https://jobboard.adem.lu/job-search?keywords=", 
+                "config": {"container": ".job-item", "title": ".job-title", "company": ".company-name", "link": "a.job-title"}
+            },
+            {
+                "name": "Moovijob", 
+                "base_url": "https://en.moovijob.com/job-offers/jobs-luxembourg?query=", 
+                "config": {"container": ".card-job-offer-new", "title": ".card-job-offer-new-title", "company": ".company-name", "link": "self"}
+            },
+            {
+                "name": "Jobs.lu", 
+                "base_url": "https://www.jobs.lu/en/results?location=Luxembourg&keywords=", 
+                "config": {"container": "tr, .job-result-item", "title": ".job-title", "company": ".recruiter-name", "link": "a.job-title"}
+            }
         ]
 
         while True:
-            total_matches = 0
-            for portal in portals:
-                total_matches += self.monitor_platform(portal["name"], portal["url"], portal["selector"])
-                self.stealth_wait(20, 45) # Long pause between portals to mimic human context switching
+            all_cycle_leads = []
+            for keyword in PROFILE_KEYWORDS:
+                print(f"🔍 Focalizando búsqueda en: {keyword}")
+                for platform in platforms:
+                    search_url = f"{platform['base_url']}{keyword.replace(' ', '%20')}"
+                    leads = self.monitor_platform(platform["name"], search_url, platform["config"])
+                    all_cycle_leads.extend(leads)
+                    self.stealth_wait(15, 30) # Pause between keyword/platform jumps
             
-            if total_matches > 0:
-                self.notify_user("WE-LUX: Resultados Reales de Búsqueda", f"Ciclo completado. {total_matches} nuevas oportunidades únicas entregadas.")
+            if all_cycle_leads:
+                self.notify_user("AiGotAJob: Hallazgos de Mercado Detectados", f"Ciclo completado. {len(all_cycle_leads)} nuevas oportunidades únicas entregadas.", leads=all_cycle_leads)
             else:
-                self.notify_user("WE-LUX: Vigilancia Completada", "Escaneo exhaustivo terminado. No hay ofertas nuevas sin duplicar. Hibernando 28h.")
+                next_scan = (datetime.now().timestamp() + 100800)
+                next_scan_dt = datetime.fromtimestamp(next_scan).strftime("%Y-%m-%d %H:%M")
+                self.notify_user("AiGotAJob: Vigilancia Completada", f"Escaneo exhaustivo terminado en Luxemburgo. Sin nuevas ofertas detectadas. Próximo inicio: {next_scan_dt} (Hibernando 28h).", is_hibernation=True)
 
-            print(f"💤 HIBERNATION ACTIVE: Next surgical scan in 28 hours.")
-            time.sleep(100800) # Strict 28h lock
+            print(f"💤 HIBERNATION ACTIVE: Next surgical scan in 28 hours (Invisible Mode).")
+            time.sleep(100800) 
 
 if __name__ == "__main__":
     hunter = AiGotAJobBot()

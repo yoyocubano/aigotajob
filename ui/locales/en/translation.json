@@ -1,0 +1,19 @@
+{
+    "app_title": "Bee Army | Personal Career Intelligence",
+    "hero_brand": "BEE ARMY",
+    "hero_subtitle": "Personal Career Intelligence",
+    "login_header": "Login to Bee Army",
+    "btn_google": "Continue with Google",
+    "btn_facebook": "Continue with Facebook",
+    "btn_linkedin": "Connect with LinkedIn",
+    "validator_title": "Personal DNA Validator",
+    "validator_desc": "Verify if your site meets the Personal Landing standards for the Bee Army Swarm.",
+    "validator_placeholder": "https://your-landing.com",
+    "validator_btn": "SCAN DIGITAL DNA",
+    "footer_cloud": "BEE ARMY NEXUS CLOUD",
+    "footer_isolation": "DATA ISOLATION: ON",
+    "overlay_title": "Bee Army Systems Active",
+    "overlay_status": "Starting biometric verification...",
+    "onboarding_header": "Profile Activation",
+    "dashboard_header": "Bee Army Swarm"
+}

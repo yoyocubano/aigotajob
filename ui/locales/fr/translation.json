@@ -1,0 +1,19 @@
+{
+    "app_title": "Bee Army | Personal Career Intelligence",
+    "hero_brand": "BEE ARMY",
+    "hero_subtitle": "Personal Career Intelligence",
+    "login_header": "Connectez-vous à Bee Army",
+    "btn_google": "Continuer avec Google",
+    "btn_facebook": "Continuer avec Facebook",
+    "btn_linkedin": "Se connecter avec LinkedIn",
+    "validator_title": "Validateur d'ADN Personnel",
+    "validator_desc": "Vérifiez si votre site respecte les standards de Landing Personnel pour l'Essaim Bee Army.",
+    "validator_placeholder": "https://votre-landing.com",
+    "validator_btn": "SCANNER L'ADN NUMÉRIQUE",
+    "footer_cloud": "BEE ARMY NEXUS CLOUD",
+    "footer_isolation": "ISOLATION DES DONNÉES: ON",
+    "overlay_title": "Systèmes Bee Army Actifs",
+    "overlay_status": "Vérification biométrique en cours...",
+    "onboarding_header": "Activation du Profil",
+    "dashboard_header": "Bee Army Essaim"
+}

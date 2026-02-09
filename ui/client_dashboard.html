@@ -75,8 +75,8 @@
     <!-- Top Bar -->
     <header class="p-6 border-b border-white/5 flex justify-between items-center glass-panel">
         <div class="flex items-center gap-4">
-            <img src="assets/welux_eagle_v6.png" class="eagle-small">
-            <h1 class="text-xl font-bold text-white tracking-widest uppercase">We<span class="text-[#d4af37]">Lux</span> Enjambre</h1>
+            <img src="assets/welux_eagle_isolated.png" class="eagle-small">
+            <h1 class="text-xl font-bold text-white tracking-widest uppercase">BEE <span class="text-[#d4af37]">ARMY</span> Enjambre</h1>
         </div>
         <div class="flex items-center gap-6">
             <div class="text-right">
@@ -140,6 +140,7 @@
         </p>
     </footer>
 
+    <script src="real_results.js"></script>
     <script>
         const companies = ["Amazon Lux", "ArcelorMittal", "Ferrero", "Deloitte", "PwC", "Spuerkeess", "State Street", "Post Lux", "Hoplr Lux", "Creative Hub", "European Investment Bank", "SES Luxembourg"];
         const actions = [
@@ -156,6 +157,30 @@
         let maxActions = 12; // One single "surgical" sweep of the market
         let currentActions = 0;
         let recentCompanies = [];
+
+        function renderRealReports() {
+            const terminal = document.getElementById('terminal');
+            if (typeof realResults !== 'undefined' && realResults.length > 0) {
+                const header = document.createElement('div');
+                header.className = 'text-[#d4af37] font-bold mb-4 border-b border-[#d4af37]/30 pb-2 flex items-center gap-2';
+                header.innerHTML = '<i class="fas fa-shield-alt"></i> BÚNKER DE RESULTADOS REALES (info@abelrhodes.com)';
+                terminal.prepend(header);
+
+                realResults.forEach(report => {
+                    const div = document.createElement('div');
+                    div.className = 'log-entry mb-4 p-3 bg-white/5 border-l-2 border-[#d4af37] rounded-r';
+                    div.innerHTML = `
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] text-gray-500 font-mono">[${report.timestamp}]</span>
+                            <span class="text-[9px] uppercase tracking-widest px-2 py-0.5 bg-[#d4af37]/20 text-[#d4af37] rounded">REAL UPDATE</span>
+                        </div>
+                        <p class="text-white font-bold text-xs mb-1">${report.subject}</p>
+                        <p class="text-gray-400 text-[11px] leading-relaxed">${report.message}</p>
+                    `;
+                    terminal.insertBefore(div, header.nextSibling);
+                });
+            }
+        }
 
         function addLog() {
             if (currentActions >= maxActions) {
@@ -207,7 +232,8 @@
             setTimeout(addLog, Math.random() * 4000 + 2000);
         }
 
-        // Start the controlled surgical strike
+        // Start the controlled surgical strike and render real data
+        renderRealReports();
         setTimeout(addLog, 2000);
     </script>
 
