@@ -153,21 +153,32 @@
         let scanned = 0;
         let matches = 0;
         let sent = 0;
+        let maxActions = 12; // One single "surgical" sweep of the market
+        let currentActions = 0;
         let recentCompanies = [];
 
         function addLog() {
+            if (currentActions >= maxActions) {
+                // Final Behavior: Mandatory 28h Hibernation Status
+                const terminal = document.getElementById('terminal');
+                const time = new Date().toLocaleTimeString();
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                div.style.borderLeftColor = "#ff3333";
+                div.innerHTML = `<span class="text-gray-600 mr-4">[${time}]</span> <span style="color:#ff3333; font-weight:bold;">ESTADO: ESCANEO COMPLETO. HIBERNANDO POR PROTOCOLO (28H)...</span>`;
+                terminal.appendChild(div);
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                // Stop the process completely. Human pattern enforced.
+                return;
+            }
+
             const terminal = document.getElementById('terminal');
             
-            // Deduplication Logic for the Simulation
+            // Ultra-Strict Deduplication
             let availableCompanies = companies.filter(c => !recentCompanies.includes(c));
-            if (availableCompanies.length === 0) {
-                recentCompanies = []; // Reset if we ran out
-                availableCompanies = companies;
-            }
-            
             const company = availableCompanies[Math.floor(Math.random() * availableCompanies.length)];
             recentCompanies.push(company);
-            if (recentCompanies.length > 5) recentCompanies.shift(); // Keep only last 5 unique
 
             const action = actions[Math.floor(Math.random() * actions.length)];
             const time = new Date().toLocaleTimeString();
@@ -190,12 +201,14 @@
             document.getElementById('sent-count').innerText = sent;
             document.getElementById('clock').innerText = time;
             
-            // Randomize interval to look less 'loop-ish'
-            setTimeout(addLog, Math.random() * 2000 + 1000);
+            currentActions++;
+            
+            // Longer intervals between actions (Human-like processing)
+            setTimeout(addLog, Math.random() * 4000 + 2000);
         }
 
-        // Start the process
-        setTimeout(addLog, 1000);
+        // Start the controlled surgical strike
+        setTimeout(addLog, 2000);
     </script>
 
 </body>
