@@ -81,108 +81,115 @@ class AiGotAJobBot:
         except:
             print("⚠️ ADEM Login failed or already logged in.")
 
-    def check_throttle(self, profile_url):
-        """Checks if we have already applied to this URL within the last 30 days."""
-        # Using the same DB path as LeadManager
+    def check_throttle(self, profile_url=None, company=None, title=None):
+        """
+        Advanced Deduplication:
+        1. Checks if we contacted this specific URL in the last 30 days.
+        2. Checks if we already applied to this identical POSITION at this identical COMPANY (cross-platform).
+        """
         local_db = "/Users/yoyocubano/Documents/ESYBISNE_APP/api/local_leads.db"
         try:
             import sqlite3
             conn = sqlite3.connect(local_db)
             c = conn.cursor()
-            c.execute("SELECT created_at FROM leads WHERE profile_url = ? ORDER BY created_at DESC LIMIT 1", (profile_url,))
-            result = c.fetchone()
-            conn.close()
+            
+            # Case A: Specific URL Check
+            if profile_url:
+                c.execute("SELECT created_at FROM leads WHERE profile_url = ? ORDER BY created_at DESC LIMIT 1", (profile_url,))
+                result = c.fetchone()
+                if result and self._is_recent(result[0]): return False
 
-            if result:
-                # Handle both ISO and SQLite default formats
-                date_str = result[0]
-                try:
-                    last_date = datetime.fromisoformat(date_str)
-                except:
-                    last_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+            # Case B: Company + Position Check (Cross-platform deduplication)
+            if company and title:
+                c.execute("SELECT created_at FROM leads WHERE name = ? AND context LIKE ? ORDER BY created_at DESC LIMIT 1", (company, f"%{title}%"))
+                result = c.fetchone()
+                if result and self._is_recent(result[0]): return False
                 
-                days_passed = (datetime.now() - last_date).days
-                if days_passed < 30:
-                    return False # Throttled
+            conn.close()
         except Exception as e:
             print(f"⚠️ Throttle check error: {e}")
-        return True # Can apply
+        return True
+
+    def _is_recent(self, date_str):
+        try:
+            last_date = datetime.fromisoformat(date_str)
+        except:
+            last_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+        days_passed = (datetime.now() - last_date).days
+        return days_passed < 30
+
+    def notify_user(self, subject, message):
+        """Simulates sending a high-end notification email to info@abelrhodes.com"""
+        print(f"📧 [NOTIFICATION SENT TO info@abelrhodes.com]")
+        print(f"   Subject: {subject}")
+        print(f"   Body: {message}")
 
     def monitor_moovijob(self):
         print("🕵️ Scouting Moovijob for new offers...")
         self.driver.get("https://www.moovijob.com/offres-emploi/luxembourg")
         self.stealth_wait(5, 10)
-        
+        new_leads_count = 0
         try:
-            # Extract job cards
             offers = self.driver.find_elements(By.CSS_SELECTOR, "article.job-card")
             for offer in offers[:10]:
                 title = offer.find_element(By.CSS_SELECTOR, "h2").text
                 company = offer.find_element(By.CSS_SELECTOR, "div.company-name").text
                 link = offer.find_element(By.TAG_NAME, "a").get_attribute("href")
                 
-                # Apply Throttling: Once per 30 days
-                if not self.check_throttle(link):
-                    print(f"⏩ Throttled: Already contacted {company} recently. Skipping to avoid spam.")
+                if not self.check_throttle(profile_url=link, company=company, title=title):
+                    print(f"⏩ Duplicate: {company} - {title}. Skipping.")
                     continue
 
                 print(f"✨ Found Mission: {title} at {company}")
-                
-                # Report to SQL
                 self.db.add_lead(
-                    platform="Moovijob",
-                    sector="Job Offer",
-                    location="Luxembourg",
-                    profile_url=link,
-                    name=company,
-                    context=f"Position: {title}"
+                    platform="Moovijob", sector="Job Offer", location="Luxembourg",
+                    profile_url=link, name=company, context=f"Position: {title}"
                 )
+                new_leads_count += 1
+            return new_leads_count
         except Exception as e:
             print(f"⚠️ Moovijob scan error: {e}")
+            return 0
 
     def monitor_jobs_lu(self):
         print("🕵️ Scouting Jobs.lu...")
         self.driver.get("https://fr.jobs.lu/emplois/luxembourg")
         self.stealth_wait(5, 10)
+        new_leads_count = 0
         try:
             cards = self.driver.find_elements(By.XPATH, "//div[contains(@class, 'job-item')]")
             for card in cards[:5]:
                 title = card.find_element(By.XPATH, ".//h2").text
-                # link = card.find_element(By.TAG_NAME, "a").get_attribute("href")
-                link = self.driver.current_url 
-                
-                if not self.check_throttle(link):
-                    continue
+                if not self.check_throttle(title=title): continue
 
                 self.db.add_lead(
-                    platform="Jobs.lu",
-                    sector="Job Offer",
-                    location="Luxembourg",
-                    profile_url=link,
-                    name="Jobs.lu Poster",
-                    context=title
+                    platform="Jobs.lu", sector="Job Offer", location="Luxembourg",
+                    profile_url=self.driver.current_url, name="Jobs.lu Poster", context=title
                 )
-        except: pass
-
-    def hunt_facebook_jobs(self):
-        print("🕵️ Facebook Sniper: Looking for Job Seekers in groups...")
-        queries = ["busco trabajo luxemburgo", "recherche emploi luxembourg", "job search luxembourg"]
-        for q in queries:
-            url = f"https://www.facebook.com/search/posts?q={q.replace(' ', '%20')}"
-            self.driver.get(url)
-            self.stealth_wait(10, 15)
-            # Find posts and message them
-            # (Reuse logic from facebook_seeker_bot.py)
+                new_leads_count += 1
+            return new_leads_count
+        except: return 0
 
     def run_swarm(self):
         print("🚀 LUXJOB SWARM: ACTIVE PATROL STARTING.")
-        # self.login_adem() # ADEM needs exact selector validation
         while True:
-            self.monitor_moovijob()
-            self.monitor_jobs_lu()
-            self.hunt_facebook_jobs()
-            print("💤 Patrolling finishes. Resting 30 min...")
-            time.sleep(1800)
+            total_new = 0
+            total_new += self.monitor_moovijob()
+            total_new += self.monitor_jobs_lu()
+            
+            if total_new > 0:
+                self.notify_user(
+                    "WE-LUX: Nuevas Oportunidades Detectadas", 
+                    f"Se han encontrado {total_new} nuevas ofertas para Luxemburgo."
+                )
+            else:
+                self.notify_user(
+                    "WE-LUX: Ciclo de Búsqueda Completado", 
+                    "No hay nuevas ofertas idénticas. Reconectando en 28 horas."
+                )
+
+            print(f"💤 Next scan in 28 hours (Elite Security Protocol).")
+            time.sleep(100800) 
 
 if __name__ == "__main__":
     hunter = AiGotAJobBot()
