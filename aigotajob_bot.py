@@ -81,6 +81,33 @@ class AiGotAJobBot:
         except:
             print("⚠️ ADEM Login failed or already logged in.")
 
+    def check_throttle(self, profile_url):
+        """Checks if we have already applied to this URL within the last 30 days."""
+        # Using the same DB path as LeadManager
+        local_db = "/Users/yoyocubano/Documents/ESYBISNE_APP/api/local_leads.db"
+        try:
+            import sqlite3
+            conn = sqlite3.connect(local_db)
+            c = conn.cursor()
+            c.execute("SELECT created_at FROM leads WHERE profile_url = ? ORDER BY created_at DESC LIMIT 1", (profile_url,))
+            result = c.fetchone()
+            conn.close()
+
+            if result:
+                # Handle both ISO and SQLite default formats
+                date_str = result[0]
+                try:
+                    last_date = datetime.fromisoformat(date_str)
+                except:
+                    last_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+                
+                days_passed = (datetime.now() - last_date).days
+                if days_passed < 30:
+                    return False # Throttled
+        except Exception as e:
+            print(f"⚠️ Throttle check error: {e}")
+        return True # Can apply
+
     def monitor_moovijob(self):
         print("🕵️ Scouting Moovijob for new offers...")
         self.driver.get("https://www.moovijob.com/offres-emploi/luxembourg")
@@ -94,6 +121,11 @@ class AiGotAJobBot:
                 company = offer.find_element(By.CSS_SELECTOR, "div.company-name").text
                 link = offer.find_element(By.TAG_NAME, "a").get_attribute("href")
                 
+                # Apply Throttling: Once per 30 days
+                if not self.check_throttle(link):
+                    print(f"⏩ Throttled: Already contacted {company} recently. Skipping to avoid spam.")
+                    continue
+
                 print(f"✨ Found Mission: {title} at {company}")
                 
                 # Report to SQL
@@ -105,8 +137,6 @@ class AiGotAJobBot:
                     name=company,
                     context=f"Position: {title}"
                 )
-                
-                # Logic to 'Quick Apply' or 'Contact' would go here
         except Exception as e:
             print(f"⚠️ Moovijob scan error: {e}")
 
@@ -114,16 +144,21 @@ class AiGotAJobBot:
         print("🕵️ Scouting Jobs.lu...")
         self.driver.get("https://fr.jobs.lu/emplois/luxembourg")
         self.stealth_wait(5, 10)
-        # Similar logic to Moovijob
         try:
             cards = self.driver.find_elements(By.XPATH, "//div[contains(@class, 'job-item')]")
             for card in cards[:5]:
                 title = card.find_element(By.XPATH, ".//h2").text
+                # link = card.find_element(By.TAG_NAME, "a").get_attribute("href")
+                link = self.driver.current_url 
+                
+                if not self.check_throttle(link):
+                    continue
+
                 self.db.add_lead(
                     platform="Jobs.lu",
                     sector="Job Offer",
                     location="Luxembourg",
-                    profile_url=self.driver.current_url,
+                    profile_url=link,
                     name="Jobs.lu Poster",
                     context=title
                 )
