@@ -30,5 +30,42 @@ Este documento es la **Sapiencia Central** del proyecto. Prioridad de lectura pa
 
 ---
 
+## 🌩️ Protocolo Puente Aéreo (MCP)
+
+Se ha establecido un canal de comunicación directo (**Backdoor**) entre la Inteligencia Artificial de Comando (Antigravity) y este repositorio de doctrina.
+
+### Capacidades Activas:
+1.  **Lectura Profunda:** El Agente puede leer y analizar este libro en tiempo real.
+2.  **Escritura Fantasma:** Las actualizaciones en esta doctrina se reflejan en el "Cerebro Digital" (NotebookLM).
+3.  **Inmortalidad del Dato:** Las sesiones de cookie se renuevan mediante extracción cURL segura.
+
 _Comandante: El enjambre ha sido recalibrado. La misión continúa bajo la bandera de AiGotAJob._
 🦅✨🫡
+
+---
+
+## 🧰 Arsenal Táctico (Open Source / Free Tools)
+
+Integración de herramientas de "Antigravity" para potenciar el sistema sin coste de licencia.
+**👉 [Ver Guía de Integración del Sistema](file:///Users/yoyocubano/.gemini/antigravity/scratch/antigravity_toolkit/SYSTEM_INTEGRATION.md)**
+
+### 🕵️ Investigación & Inteligencia
+*   **Google Dorks (Técnica):** Comandos avanzados de búsqueda para localizar datasets, vulnerabilidades y archivos ocultos.
+    *   *Uso:* `site:gov filetype:csv` (Data Mining), `inurl:admin` (Seguridad).
+    *   *Recurso:* [Cheatsheet Dorks](file:///Users/yoyocubano/.gemini/antigravity/scratch/antigravity_toolkit/google_dorks.md)
+*   **APIs Gratuitas (Firecrawl / ScrapingBee):** Motores de extracción de datos web.
+    *   *Integración:* Convertir sitios web en Markdown limpio para alimentar LLMs o bases de datos vectoriales.
+    *   *Script:* [Agente Firecrawl](file:///Users/yoyocubano/.gemini/antigravity/scratch/antigravity_toolkit/scripts/firecrawl_agent.py)
+
+### 💻 Desarrollo & Automatización
+*   **Kilo AI (Open Source):** Asistente de codificación local.
+    *   *Ventaja:* Privacidad total y ejecución offline para tareas sensibles.
+*   **Hunyuan 3D (Tencent - Open Source):** Generación de assets 3D de alta fidelidad.
+    *   *Despliegue:* Ejecutable en local (requiere GPU) para crear props/entornos sin coste por crédito.
+    *   *Guía:* [Despliegue Local](file:///Users/yoyocubano/.gemini/antigravity/scratch/antigravity_toolkit/open_source_models.md)
+
+### 🎨 Generación de Contenido (Freemium)
+*   **Recraft AI:** Vectores y logos escalables.
+    *   *Uso:* Generación de UI assets y branding consistente.
+*   **Tripo3d:** Prototipado rápido 3D.
+
