@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enjambre Maestro V5 | Plan de Acción</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0f1a;
+            --text: #e2e8f0;
+            --personal: #f59e0b;
+            --agency: #f43f5e;
+            --subs: #3b82f6;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 700;
+            color: #fff;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            margin-bottom: 20px;
+            opacity: 0.6;
+            font-weight: 300;
+        }
+
+        .mermaid {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 1200px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🛰️ ENJAMBRE MAESTRO V5</h1>
+    <p class="subtitle">Estructura Final | Agencia + Suscripciones + Cerebro Digital</p>
+
+    <div class="mermaid">
+        graph TD
+        %% --- SECCION PERSONAL ---
+        subgraph Personal ["PERSONAL DIGITAL BRAIN"]
+        A1["Facebook/TikTok Saved"] --> B1["Maxun Scraper"]
+        B1 --> C1{"AI Analysis"}
+        C1 --> D1["Google Doc Summary"]
+        end
+
+        %% --- SECCION AGENCIA ---
+        subgraph Agency ["ESY BISNE - AGENCIA"]
+        A2["Google Maps/Editus"] --> B2["Maxun Lead Scraper"]
+        B2 --> C2["Lusha Email API"]
+        C2 --> D2["Email Automatizado"]
+        end
+
+        %% --- SECCION SUSCRIPCIONES ---
+        subgraph Subs ["MONEY FLOW (SUBS)"]
+        A3["Jobs/Rentals"] --> B3["Maxun Monitoring"]
+        B3 --> C3{"Check Subscription"}
+        C3 -- "Paid" --> D3["Direct Leads (WA/Email)"]
+        C3 -- "Unpaid" --> E3["Paywall / Offer"]
+        end
+
+        %% Conexiones
+        B2 --> DB[("GOLD_LEADS TABLE")]
+        C3 --> DB_Users[("SUBS_TABLE")]
+
+        %% Estilos
+        style Personal fill:#f59e0b,color:#000
+        style Agency fill:#f43f5e,color:#fff
+        style Subs fill:#3b82f6,color:#fff
+        style DB fill:#1e293b,stroke:#fbbf24
+        style DB_Users fill:#1e293b,stroke:#3b82f6
+    </div>
+
+    <script>
+        mermaid.initialize({
+            theme: 'dark',
+            startOnLoad: true,
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'linear' }
+        });
+    </script>
+</body>
+
+</html>

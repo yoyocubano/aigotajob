@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esy Bisne | Alertas VIP Luxemburgo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF3CAC;
+            --secondary: #784BA0;
+            --accent: #2B86C5;
+            --bg: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: linear-gradient(225deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #ddd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .price span {
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        .features {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .feature-item i {
+            color: #4ade80;
+            margin-right: 10px;
+        }
+
+        .btn {
+            background: white;
+            color: var(--bg);
+            padding: 18px 30px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 700;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #eee;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="badge">Luxembourg VIP Access</div>
+        <h1 class="logo">Esy Bisne</h1>
+        <h2>Encuentra tu casa antes que nadie.</h2>
+
+        <div class="price-card">
+            <div class="price">9.99€<span>/mes</span></div>
+            <p>Suscripción de Alertas Real-Time</p>
+        </div>
+
+        <div class="features">
+            <div class="feature-item"><i>✓</i> Alertas instantáneas por WhatsApp</div>
+            <div class="feature-item"><i>✓</i> Filtro anti-estafas por IA</div>
+            <div class="feature-item"><i>✓</i> Ofertas de particulares (Sin agencia)</div>
+            <div class="feature-item"><i>✓</i> Acceso 24h antes que en los portales</div>
+        </div>
+
+        <a href="#" class="btn" id="checkout-button">¡Quiero mi acceso VIP!</a>
+
+        <p class="footer">Seguridad garantizada por Stripe. Cancela cuando quieras.</p>
+    </div>
+
+    <script>
+        document.getElementById('checkout-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('¡Conectando con Stripe Checkout! El flow de Activepieces detectará tu pago en segundos.');
+        });
+    </script>
+</body>
+</html>

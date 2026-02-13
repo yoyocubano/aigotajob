@@ -1,0 +1,97 @@
+{
+  "displayName": "ENJAMBRE MAESTRO V5",
+  "trigger": {
+    "name": "trigger",
+    "displayName": "Webhook Receptor Maxun",
+    "type": "WEBHOOK",
+    "settings": {},
+    "valid": true,
+    "nextAction": {
+      "name": "step_1",
+      "displayName": "Router Inteligente (AI)",
+      "type": "ROUTER",
+      "settings": {
+        "branches": [
+          {
+            "name": "Agencia Esy Bisne",
+            "conditions": [
+              [{ "operator": "TEXT_CONTAINS", "firstValue": "{{trigger.type}}", "secondValue": "business" }]
+            ],
+            "nextAction": {
+              "name": "lusha_enrichment",
+              "displayName": "Lusha: Buscar Dueño",
+              "type": "PIECE",
+              "settings": {
+                "pieceName": "lusha",
+                "actionName": "find_person"
+              },
+              "nextAction": {
+                "name": "agency_email",
+                "displayName": "Enviar Propuesta Web/Fotos",
+                "type": "PIECE",
+                "settings": {
+                  "pieceName": "gmail",
+                  "actionName": "send_email"
+                }
+              }
+            }
+          },
+          {
+            "name": "AiGotAJob / Reclutadores",
+            "conditions": [
+              [{ "operator": "TEXT_CONTAINS", "firstValue": "{{trigger.type}}", "secondValue": "job" }]
+            ],
+            "nextAction": {
+              "name": "check_subscription_job",
+              "displayName": "Validar Suscripción Premium",
+              "type": "PIECE",
+              "settings": {
+                "pieceName": "activepieces-tables",
+                "actionName": "get_record"
+              }
+            }
+          },
+          {
+            "name": "Rentas VIP Luxemburgo",
+            "conditions": [
+              [{ "operator": "TEXT_CONTAINS", "firstValue": "{{trigger.type}}", "secondValue": "rental" }]
+            ],
+            "nextAction": {
+              "name": "whatsapp_alert",
+              "displayName": "WhatsApp: Alerta de Alquiler",
+              "type": "PIECE",
+              "settings": {
+                "pieceName": "whatsapp-business",
+                "actionName": "send_template"
+              }
+            }
+          },
+          {
+            "name": "Cerebro Personal",
+            "conditions": [
+              [{ "operator": "TEXT_CONTAINS", "firstValue": "{{trigger.type}}", "secondValue": "personal" }]
+            ],
+            "nextAction": {
+              "name": "ai_summary",
+              "displayName": "IA: Sintetizar Ideas",
+              "type": "PIECE",
+              "settings": {
+                "pieceName": "openai",
+                "actionName": "ask_chatgpt"
+              },
+              "nextAction": {
+                "name": "update_gdoc",
+                "displayName": "Actualizar Google Doc Maestro",
+                "type": "PIECE",
+                "settings": {
+                  "pieceName": "google-docs",
+                  "actionName": "append_text"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
